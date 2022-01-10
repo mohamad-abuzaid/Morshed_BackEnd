@@ -1,0 +1,188 @@
+2022-01-09T22:34:53.941+0200	[31mERROR[0m	controller/handler.go:31	sql: database is closed
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:1038
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/performer.go:20
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:83
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWith
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:115
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).First
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/statement.go:424
+github.com/GoAdminGroup/go-admin/plugins/admin/models.UserModel.FindByUserName
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/models/user.go:70
+github.com/GoAdminGroup/go-admin/modules/auth.Check
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/auth/auth.go:29
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).Auth
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/auth.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/iris.(*Iris).AddHandler.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/adapter/iris/iris.go:97
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*routerHandler).HandleRequest
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/handler.go:440
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:111
+github.com/kataras/iris/v12/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:648
+github.com/kataras/iris/v12.injectLiveReload.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/cli.go:91
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func3
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:156
+github.com/kataras/iris/v12/core/router.(*Router).ServeHTTP
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:339
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2879
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:1930
+2022-01-09T22:35:19.820+0200	[31mERROR[0m	controller/handler.go:31	sql: database is closed
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:1038
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/performer.go:20
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:83
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWith
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:115
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).First
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/statement.go:424
+github.com/GoAdminGroup/go-admin/plugins/admin/models.UserModel.FindByUserName
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/models/user.go:70
+github.com/GoAdminGroup/go-admin/modules/auth.Check
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/auth/auth.go:29
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).Auth
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/auth.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/iris.(*Iris).AddHandler.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/adapter/iris/iris.go:97
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*routerHandler).HandleRequest
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/handler.go:440
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:111
+github.com/kataras/iris/v12/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:648
+github.com/kataras/iris/v12.injectLiveReload.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/cli.go:91
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func3
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:156
+github.com/kataras/iris/v12/core/router.(*Router).ServeHTTP
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:339
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2879
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:1930
+2022-01-09T22:36:41.698+0200	[31mERROR[0m	controller/handler.go:31	sql: database is closed
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:1038
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/performer.go:20
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:83
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWith
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:115
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).First
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/statement.go:424
+github.com/GoAdminGroup/go-admin/plugins/admin/models.UserModel.FindByUserName
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/models/user.go:70
+github.com/GoAdminGroup/go-admin/modules/auth.Check
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/auth/auth.go:29
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).Auth
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/auth.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/iris.(*Iris).AddHandler.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/adapter/iris/iris.go:97
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*routerHandler).HandleRequest
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/handler.go:440
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:111
+github.com/kataras/iris/v12/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:648
+github.com/kataras/iris/v12.injectLiveReload.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/cli.go:91
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func3
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:156
+github.com/kataras/iris/v12/core/router.(*Router).ServeHTTP
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:339
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2879
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:1930
+2022-01-09T22:38:04.759+0200	[31mERROR[0m	controller/handler.go:31	sql: database is closed
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).GlobalDeferHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/handler.go:31
+runtime.gopanic
+	/usr/local/go/src/runtime/panic.go:1038
+github.com/GoAdminGroup/go-admin/modules/db.CommonQuery
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/performer.go:20
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWithConnection
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:83
+github.com/GoAdminGroup/go-admin/modules/db.(*Mysql).QueryWith
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/mysql.go:115
+github.com/GoAdminGroup/go-admin/modules/db.(*SQL).First
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/db/statement.go:424
+github.com/GoAdminGroup/go-admin/plugins/admin/models.UserModel.FindByUserName
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/models/user.go:70
+github.com/GoAdminGroup/go-admin/modules/auth.Check
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/modules/auth/auth.go:29
+github.com/GoAdminGroup/go-admin/plugins/admin/controller.(*Handler).Auth
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/controller/auth.go:51
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/plugins/admin.(*Admin).globalErrorHandler
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/plugins/admin/router.go:106
+github.com/GoAdminGroup/go-admin/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/context/context.go:101
+github.com/GoAdminGroup/go-admin/adapter/iris.(*Iris).AddHandler.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/!go!admin!group/go-admin@v1.2.23/adapter/iris/iris.go:97
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*routerHandler).HandleRequest
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/handler.go:440
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:111
+github.com/kataras/iris/v12/context.(*Context).Next
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:648
+github.com/kataras/iris/v12.injectLiveReload.func1
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/cli.go:91
+github.com/kataras/iris/v12/context.(*Context).Do
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/context/context.go:506
+github.com/kataras/iris/v12/core/router.(*Router).buildMainHandlerWithFilters.func3
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:156
+github.com/kataras/iris/v12/core/router.(*Router).ServeHTTP
+	/Users/mabuzaid/Desktop/CodeHub/GoLang/GoWorkspace/pkg/mod/github.com/kataras/iris/v12@v12.2.0-alpha5.0.20220108175433-f633ab4b99fd/core/router/router.go:339
+net/http.serverHandler.ServeHTTP
+	/usr/local/go/src/net/http/server.go:2879
+net/http.(*conn).serve
+	/usr/local/go/src/net/http/server.go:1930
