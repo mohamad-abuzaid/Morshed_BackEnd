@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"morshed/models"
-	"morshed/services"
+	"morshed/data/models"
+	"morshed/data/services"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/accesslog"

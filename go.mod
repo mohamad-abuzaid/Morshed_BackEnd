@@ -9,5 +9,6 @@ require (
 	github.com/gobuffalo/packr/v2 v2.8.3 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kataras/iris/v12 v12.2.0-alpha5.0.20220108175433-f633ab4b99fd
+	golang.org/x/crypto v0.0.0-20211117183948-ae814b36b871
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 )

@@ -5,8 +5,10 @@ import (
 	"os"
 	"os/signal"
 
-	"morshed/controllers"
-	"morshed/services"
+	"morshed/data/datasource"
+	"morshed/data/repositories"
+	"morshed/data/services"
+	"morshed/domain/controllers"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
@@ -28,10 +30,31 @@ import (
 
 func main() {
 	app := iris.New()
+	// You got full debug messages, useful when using MVC and you want to make
+	// sure that your code is aligned with the Iris' MVC Architecture.
+	app.Logger().SetLevel("debug")
+	
+	// Load the template files.
+	tmpl := iris.HTML("./app/views", ".html").
+		Layout("shared/layout.html").
+		Reload(true)
+	app.RegisterView(tmpl)
+
 	// Serve our front-end and its assets.
 	app.HandleDir("/", iris.Dir("./app/public"))
 	template.AddComp(chartjs.NewChart())
 
+	// Note, it's buffered, so make sure it's closed so it can flush any buffered contents.
+	ac := accesslog.File("./access.log")
+	defer ac.Close()
+
+	app.UseRouter(ac.Handler)
+	app.UseRouter(recover.New())
+
+	/////////////////////////////////////////////////
+	////////////// ADMIN PANEL /////////////////////
+
+	// Initialize Admin Panel
 	eng := engine.Default()
 	if err := eng.AddConfigFromJSON("./goadmin/config.json").
 		AddGenerators(tables.Generators).
@@ -59,12 +82,29 @@ func main() {
 	log.Print("closing database connection")
 	eng.MysqlConnection().Close()
 
-	// Note, it's buffered, so make sure it's closed so it can flush any buffered contents.
-	ac := accesslog.File("./access.log")
-	defer ac.Close()
+	/////////////////////////////////////////////////
+	////////////////// DataSource //////////////////
+	
+	// Prepare our repositories and services.
+	db, err := datasource.LoadUsers(datasource.Memory)
+	if err != nil {
+		app.Logger().Fatalf("error while loading the users: %v", err)
+		return
+	}
+	repo := repositories.NewUserRepository(db)
+	userService := services.NewUserService(repo)
+	
+	/////////////////////////////////////////////////
+	/////////////////// Routing ////////////////////
+	///////////////////////////////////////////////
 
-	app.UseRouter(ac.Handler)
-	app.UseRouter(recover.New())
+	/////////////////// Users /////////////////////
+
+
+	/////////////////// Users /////////////////////
+
+	/////////////////// COUNTER /////////////////////
+
 	// Group routes and mvc apps based on /api path prefix.
 	api := app.Party("/api")
 	{
@@ -94,5 +134,5 @@ func main() {
 
 	// GET http://localhost:8080/api/counter
 	// POST http://localhost:8080/api/counter/increment
-	app.Listen(":8080")
+	app.Listen(":8080", iris.WithOptimizations)
 }
