@@ -1,29 +1,29 @@
 package controllers
 
 import (
-	"morshed/data/engine/service"
 	"morshed/data/engine/sql"
 	"morshed/data/models"
+	"morshed/domain/services"
 	"morshed/helpers"
 
 	"github.com/kataras/iris/v12"
 )
 
 // CategoryHandler is the http mux for categories.
-type CategoryHandler struct {
+type CategoryController struct {
 	// [...options]
 
-	service *service.CategoryService
+	service *services.CategoryService
 }
 
 // NewCategoryHandler returns the main controller for the categories API.
-func NewCategoryHandler(service *service.CategoryService) *CategoryHandler {
-	return &CategoryHandler{service}
+func NewCategoryController(service *service.CategoryService) *CategoryController {
+	return &CategoryController{service}
 }
 
 // GetByID fetches a single record from the database and sends it to the client.
 // Method: GET.
-func (h *CategoryHandler) GetByID(ctx iris.Context) {
+func (h *CategoryController) GetByID(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	var cat models.Category
@@ -61,7 +61,7 @@ type (
 
 // List lists a set of records from the database.
 // Method: GET.
-func (h *CategoryHandler) List(ctx iris.Context) {
+func (h *CategoryController) List(ctx iris.Context) {
 	q := ctx.Request().URL.Query()
 	opts := sql.ParseListOptions(q)
 
@@ -81,7 +81,7 @@ func (h *CategoryHandler) List(ctx iris.Context) {
 
 // Create adds a record to the database.
 // Method: POST.
-func (h *CategoryHandler) Create(ctx iris.Context) {
+func (h *CategoryController) Create(ctx iris.Context) {
 	var cat models.Category
 	if err := ctx.ReadJSON(&cat); err != nil {
 		return
@@ -106,7 +106,7 @@ func (h *CategoryHandler) Create(ctx iris.Context) {
 
 // Update performs a full-update of a record in the database.
 // Method: PUT.
-func (h *CategoryHandler) Update(ctx iris.Context) {
+func (h *CategoryController) Update(ctx iris.Context) {
 	var cat models.Category
 	if err := ctx.ReadJSON(&cat); err != nil {
 		return
@@ -134,7 +134,7 @@ func (h *CategoryHandler) Update(ctx iris.Context) {
 
 // PartialUpdate is the handler for partially update one or more fields of the record.
 // Method: PATCH.
-func (h *CategoryHandler) PartialUpdate(ctx iris.Context) {
+func (h *CategoryController) PartialUpdate(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	var attrs map[string]interface{}
@@ -164,7 +164,7 @@ func (h *CategoryHandler) PartialUpdate(ctx iris.Context) {
 
 // Delete removes a record from the database.
 // Method: DELETE.
-func (h *CategoryHandler) Delete(ctx iris.Context) {
+func (h *CategoryController) Delete(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	affected, err := h.service.DeleteByID(ctx.Request().Context(), id)
@@ -193,7 +193,7 @@ func (h *CategoryHandler) Delete(ctx iris.Context) {
 // Example: from cheap to expensive:
 // http://localhost:8080/category/3/products?offset=0&limit=30&by=price&order=asc
 // Method: GET.
-func (h *CategoryHandler) ListProducts(ctx iris.Context) {
+func (h *CategoryController) ListProducts(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	// NOTE: could add cache here too.
@@ -220,7 +220,7 @@ func (h *CategoryHandler) ListProducts(ctx iris.Context) {
 
 // InsertProducts assigns new products to a Category (accepts a list of products).
 // Method: POST.
-func (h *CategoryHandler) InsertProducts(productService *service.ProductService) iris.Handler {
+func (h *CategoryController) InsertProducts(productService *service.ProductService) iris.Handler {
 	return func(ctx iris.Context) {
 		categoryID := ctx.Params().GetInt64Default("id", 0)
 

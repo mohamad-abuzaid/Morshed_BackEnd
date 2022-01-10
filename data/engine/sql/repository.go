@@ -11,25 +11,25 @@ import (
 	"strings"
 )
 
-// Service holder for common queries.
-// Note: each entity service keeps its own base Service instance.
-type Service struct {
+// Repository holder for common queries.
+// Note: each entity service keeps its own base Repository instance.
+type Repository struct {
 	db  Database
 	rec Record // see `Count`, `List` and `DeleteByID` methods.
 }
 
-// NewService returns a new (SQL) base service for common operations.
-func NewService(db Database, of Record) *Service {
-	return &Service{db: db, rec: of}
+// NewRepository returns a new (SQL) base service for common operations.
+func NewRepository(db Database, of Record) *Repository {
+	return &Repository{db: db, rec: of}
 }
 
 // DB exposes the database instance.
-func (s *Service) DB() Database {
+func (s *Repository) DB() Database {
 	return s.db
 }
 
 // RecordInfo returns the record info provided through `NewService`.
-func (s *Service) RecordInfo() Record {
+func (s *Repository) RecordInfo() Record {
 	return s.rec
 }
 
@@ -38,7 +38,7 @@ func (s *Service) RecordInfo() Record {
 var ErrNoRows = sql.ErrNoRows
 
 // GetByID binds a single record from the databases to the "dest".
-func (s *Service) GetByID(ctx context.Context, dest interface{}, id int64) error {
+func (s *Repository) GetByID(ctx context.Context, dest interface{}, id int64) error {
 	q := fmt.Sprintf("SELECT * FROM %s WHERE %s = ? LIMIT 1", s.rec.TableName(), s.rec.PrimaryKey())
 	err := s.db.Get(ctx, dest, q, id)
 	return err
@@ -54,7 +54,7 @@ func (s *Service) GetByID(ctx context.Context, dest interface{}, id int64) error
 }
 
 // Count returns the total records count in the table.
-func (s *Service) Count(ctx context.Context) (total int64, err error) {
+func (s *Repository) Count(ctx context.Context) (total int64, err error) {
 	q := fmt.Sprintf("SELECT COUNT(DISTINCT %s) FROM %s", s.rec.PrimaryKey(), s.rec.TableName())
 	if err = s.db.Select(ctx, &total, q); err == sql.ErrNoRows {
 		err = nil
@@ -123,7 +123,7 @@ func ParseListOptions(q url.Values) ListOptions {
 // List binds one or more records from the database to the "dest".
 // If the record supports ordering then it will sort by the `Sorted.OrderBy` column name(s).
 // Use the "order" input parameter to set a descending order ("DESC").
-func (s *Service) List(ctx context.Context, dest interface{}, opts ListOptions) error {
+func (s *Repository) List(ctx context.Context, dest interface{}, opts ListOptions) error {
 	// Set table and order by column from record info for `List` by options
 	// so it can be more flexible to perform read-only calls of other table's too.
 	if opts.Table == "" {
@@ -141,7 +141,7 @@ func (s *Service) List(ctx context.Context, dest interface{}, opts ListOptions) 
 }
 
 // DeleteByID removes a single record of "dest" from the database.
-func (s *Service) DeleteByID(ctx context.Context, id int64) (int, error) {
+func (s *Repository) DeleteByID(ctx context.Context, id int64) (int, error) {
 	q := fmt.Sprintf("DELETE FROM %s WHERE %s = ? LIMIT 1", s.rec.TableName(), s.rec.PrimaryKey())
 	res, err := s.db.Exec(ctx, q, id)
 	if err != nil {
@@ -162,7 +162,7 @@ var ErrUnprocessable = errors.New("invalid entity")
 // PartialUpdate accepts a columns schema and a key-value map to
 // update the record based on the given "id".
 // Note: Trivial string, int and boolean type validations are performed here.
-func (s *Service) PartialUpdate(ctx context.Context, id int64, schema map[string]reflect.Kind, attrs map[string]interface{}) (int, error) {
+func (s *Repository) PartialUpdate(ctx context.Context, id int64, schema map[string]reflect.Kind, attrs map[string]interface{}) (int, error) {
 	if len(schema) == 0 || len(attrs) == 0 {
 		return 0, nil
 	}

@@ -1,59 +1,35 @@
 package controllers
 
 import (
-	"time"
-
-	"morshed/data/engine/cache"
-	"morshed/data/engine/service"
 	"morshed/data/engine/sql"
 	"morshed/data/models"
+	"morshed/domain/services"
 	"morshed/helpers"
 
 	"github.com/kataras/iris/v12"
 )
 
 // ProductHandler is the http mux for products.
-type ProductHandler struct {
-	service *service.ProductService
-	cache   *cache.Cache
-}
-
-// NewProductHandler returns the main controller for the products API.
-func NewProductHandler(service *service.ProductService) *ProductHandler {
-	return &ProductHandler{
-		service: service,
-		cache:   cache.New(service, "products", time.Minute),
-	}
+type ProductController struct {
+	Ctx iris.Context
+	Service services.ProductService
 }
 
 // GetByID fetches a single record from the database and sends it to the client.
 // Method: GET.
-func (h *ProductHandler) GetByID(ctx iris.Context) {
-	id := ctx.Params().GetString("id")
-
-	var product []byte
-	err := h.cache.GetByID(ctx.Request().Context(), id, &product)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			helpers.MwriteEntityNotFound(ctx)
-			return
-		}
-
-		helpers.Mdebugf("ProductHandler.GetByID(id=%v): %v", id, err)
-		helpers.MwriteInternalServerError(ctx)
-		return
+func (c *ProductController) GetBy(id int64) (product models.Product, found bool) {
+	u, found := c.Service.GetByID(id)
+	if !found {
+		// this message will be binded to the
+		// main.go -> app.OnAnyErrorCode -> NotFound -> shared/error.html -> .Message text.
+		c.Ctx.Values().Set("message", "Product couldn't be found!")
 	}
-
-	ctx.ContentType("application/json")
-	ctx.Write(product)
-
-	// ^ Could use our simple `noCache` or implement a Cache-Control (see kataras/iris/cache for that)
-	// but let's keep it simple.
+	return u, found // it will throw/emit 404 if found == false.
 }
 
 // List lists a set of records from the database.
 // Method: GET.
-func (h *ProductHandler) List(ctx iris.Context) {
+func (h *ProductController) List(ctx iris.Context) {
 	key := ctx.Request().URL.RawQuery
 
 	products := []byte("[]")
@@ -72,7 +48,7 @@ func (h *ProductHandler) List(ctx iris.Context) {
 
 // Create adds a record to the database.
 // Method: POST.
-func (h *ProductHandler) Create(ctx iris.Context) {
+func (h *ProductController) Create(ctx iris.Context) {
 	var product models.Product
 	if err := ctx.ReadJSON(&product); err != nil {
 		return
@@ -97,7 +73,7 @@ func (h *ProductHandler) Create(ctx iris.Context) {
 
 // Update performs a full-update of a record in the database.
 // Method: PUT.
-func (h *ProductHandler) Update(ctx iris.Context) {
+func (h *ProductController) Update(ctx iris.Context) {
 	var product models.Product
 	if err := ctx.ReadJSON(&product); err != nil {
 		return
@@ -125,7 +101,7 @@ func (h *ProductHandler) Update(ctx iris.Context) {
 
 // PartialUpdate is the handler for partially update one or more fields of the record.
 // Method: PATCH.
-func (h *ProductHandler) PartialUpdate(ctx iris.Context) {
+func (h *ProductController) PartialUpdate(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	var attrs map[string]interface{}
@@ -155,7 +131,7 @@ func (h *ProductHandler) PartialUpdate(ctx iris.Context) {
 
 // Delete removes a record from the database.
 // Method: DELETE.
-func (h *ProductHandler) Delete(ctx iris.Context) {
+func (h *ProductController) Delete(ctx iris.Context) {
 	id := ctx.Params().GetInt64Default("id", 0)
 
 	affected, err := h.service.DeleteByID(ctx.Request().Context(), id)

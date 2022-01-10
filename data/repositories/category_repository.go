@@ -1,28 +1,28 @@
-package service
+package repositories
 
 import (
 	"context"
 	"fmt"
 	"reflect"
 
-	"myapp/entity"
-	"myapp/sql"
+	"morshed/data/engine/sql"
+	"morshed/data/models"
 )
 
-// CategoryService represents the category entity service.
-// Note that the given entity (request) should be already validated
+// CategoryRepository represents the category models service.
+// Note that the given models (request) should be already validated
 // before service's calls.
-type CategoryService struct {
-	*sql.Service
+type CategoryRepository struct {
+	*sql.Repository
 }
 
-// NewCategoryService returns a new category service to communicate with the database.
-func NewCategoryService(db sql.Database) *CategoryService {
-	return &CategoryService{Service: sql.NewService(db, new(entity.Category))}
+// NewCategoryRepository returns a new category service to communicate with the database.
+func NewCategoryRepository(db sql.Database) *CategoryRepository {
+	return &CategoryRepository{Repository: sql.NewRepository(db, new(models.Category))}
 }
 
 // Insert stores a category to the database and returns its ID.
-func (s *CategoryService) Insert(ctx context.Context, e entity.Category) (int64, error) {
+func (r *CategoryRepository) Insert(ctx context.Context, e models.Category) (int64, error) {
 	if e.Title == "" || e.ImageURL == "" {
 		return 0, sql.ErrUnprocessable
 	}
@@ -30,7 +30,7 @@ func (s *CategoryService) Insert(ctx context.Context, e entity.Category) (int64,
 	q := fmt.Sprintf(`INSERT INTO %s (title, position, image_url)
 	VALUES (?,?,?);`, e.TableName())
 
-	res, err := s.DB().Exec(ctx, q, e.Title, e.Position, e.ImageURL)
+	res, err := r.DB().Exec(ctx, q, e.Title, e.Position, e.ImageURL)
 	if err != nil {
 		return 0, err
 	}
@@ -39,7 +39,7 @@ func (s *CategoryService) Insert(ctx context.Context, e entity.Category) (int64,
 }
 
 // Update updates a category based on its `ID`.
-func (s *CategoryService) Update(ctx context.Context, e entity.Category) (int, error) {
+func (r *CategoryRepository) Update(ctx context.Context, e models.Category) (int, error) {
 	if e.ID == 0 || e.Title == "" || e.ImageURL == "" {
 		return 0, sql.ErrUnprocessable
 	}
@@ -51,7 +51,7 @@ func (s *CategoryService) Update(ctx context.Context, e entity.Category) (int, e
 	    image_url = ?
 	WHERE %s = ?;`, e.TableName(), e.PrimaryKey())
 
-	res, err := s.DB().Exec(ctx, q, e.Title, e.Position, e.ImageURL, e.ID)
+	res, err := r.DB().Exec(ctx, q, e.Title, e.Position, e.ImageURL, e.ID)
 	if err != nil {
 		return 0, err
 	}
@@ -69,6 +69,6 @@ var categoryUpdateSchema = map[string]reflect.Kind{
 
 // PartialUpdate accepts a key-value map to
 // update the record based on the given "id".
-func (s *CategoryService) PartialUpdate(ctx context.Context, id int64, attrs map[string]interface{}) (int, error) {
-	return s.Service.PartialUpdate(ctx, id, categoryUpdateSchema, attrs)
+func (r *CategoryRepository) PartialUpdate(ctx context.Context, id int64, attrs map[string]interface{}) (int, error) {
+	return r.Repository.PartialUpdate(ctx, id, categoryUpdateSchema, attrs)
 }

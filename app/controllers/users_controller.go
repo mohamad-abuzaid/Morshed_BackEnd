@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"morshed/data/models"
-	"morshed/data/services"
+	"morshed/domain/services"
 
 	"github.com/kataras/iris/v12"
 )
@@ -22,7 +22,7 @@ type UsersController struct {
 
 	// Our UserService, it's an interface which
 	// is binded from the main application.
-	Service services.UserService
+	Service services.ProductService
 }
 
 // Get returns list of the users.

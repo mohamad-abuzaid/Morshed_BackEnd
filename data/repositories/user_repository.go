@@ -4,35 +4,23 @@ import (
 	"errors"
 	"sync"
 
+	"morshed/data/engine/sql"
 	"morshed/data/models"
 )
 
 // Query represents the visitor and action queries.
 type Query func(models.User) bool
 
-// UserRepository handles the basic operations of a user entity/model.
-// It's an interface in order to be testable, i.e a memory user repository or
-// a connected to an sql database.
-type UserRepository interface {
-	Exec(query Query, action Query, limit int, mode int) (ok bool)
-
-	Select(query Query) (user models.User, found bool)
-	SelectMany(query Query, limit int) (results []models.User)
-
-	InsertOrUpdate(user models.User) (updatedUser models.User, err error)
-	Delete(query Query, limit int) (deleted bool)
-}
-
 // NewUserRepository returns a new user memory-based repository,
 // the one and only repository type in our example.
-func NewUserRepository(source map[int64]models.User) UserRepository {
-	return &userMemoryRepository{source: source}
+func NewUserRepository(source sql.Database) DataRepository {
+	return &userMysqlRepository{source: source}
 }
 
-// userMemoryRepository is a "UserRepository"
+// userMysqlRepository is a "DataRepository"
 // which manages the users using the memory data source (map).
-type userMemoryRepository struct {
-	source map[int64]models.User
+type userMysqlRepository struct {
+	source sql.Database
 	mu     sync.RWMutex
 }
 
@@ -43,7 +31,7 @@ const (
 	ReadWriteMode
 )
 
-func (r *userMemoryRepository) Exec(query Query, action Query, actionLimit int, mode int) (ok bool) {
+func (r *userMysqlRepository) Exec(query Query, action Query, actionLimit int, mode int) (ok bool) {
 	loops := 0
 
 	if mode == ReadOnlyMode {
@@ -81,7 +69,7 @@ func (r *userMemoryRepository) Exec(query Query, action Query, actionLimit int, 
 // It's actually a simple but very clever prototype function
 // I'm using everywhere since I firstly think of it,
 // hope you'll find it very useful as well.
-func (r *userMemoryRepository) Select(query Query) (user models.User, found bool) {
+func (r *userMysqlRepository) Select(query Query) (user models.User, found bool) {
 	found = r.Exec(query, func(m models.User) bool {
 		user = m
 		return true
@@ -97,7 +85,7 @@ func (r *userMemoryRepository) Select(query Query) (user models.User, found bool
 
 // SelectMany same as Select but returns one or more models.User as a slice.
 // If limit <=0 then it returns everything.
-func (r *userMemoryRepository) SelectMany(query Query, limit int) (results []models.User) {
+func (r *userMysqlRepository) SelectMany(query Query, limit int) (results []models.User) {
 	r.Exec(query, func(m models.User) bool {
 		results = append(results, m)
 		return true
@@ -109,7 +97,7 @@ func (r *userMemoryRepository) SelectMany(query Query, limit int) (results []mod
 // InsertOrUpdate adds or updates a user to the (memory) storage.
 //
 // Returns the new user and an error if any.
-func (r *userMemoryRepository) InsertOrUpdate(user models.User) (models.User, error) {
+func (r *userMysqlRepository) InsertOrUpdate(user models.User) (models.User, error) {
 	id := user.ID
 
 	if id == 0 { // Create new action
@@ -166,7 +154,7 @@ func (r *userMemoryRepository) InsertOrUpdate(user models.User) (models.User, er
 	return user, nil
 }
 
-func (r *userMemoryRepository) Delete(query Query, limit int) bool {
+func (r *userMysqlRepository) Delete(query Query, limit int) bool {
 	return r.Exec(query, func(m models.User) bool {
 		delete(r.source, m.ID)
 		return true
