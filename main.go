@@ -5,13 +5,11 @@ import (
 	"os"
 	"os/signal"
 
+	"morshed/api"
 	"morshed/data/datasource"
-	"morshed/data/repositories"
-	"morshed/data/services"
-	"morshed/domain/controllers"
+	"morshed/helpers"
 
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/mvc"
 
 	"github.com/kataras/iris/v12/middleware/accesslog"
 	"github.com/kataras/iris/v12/middleware/recover"
@@ -81,58 +79,29 @@ func main() {
 	<-quit
 	log.Print("closing database connection")
 	eng.MysqlConnection().Close()
-
+	
 	/////////////////////////////////////////////////
 	////////////////// DataSource //////////////////
 	
 	// Prepare our repositories and services.
-	db, err := datasource.LoadUsers(datasource.Memory)
+	db, err := datasource.StartMySql(datasource.MySQL)
 	if err != nil {
 		app.Logger().Fatalf("error while loading the users: %v", err)
 		return
 	}
-	repo := repositories.NewUserRepository(db)
-	userService := services.NewUserService(repo)
-	
+
 	/////////////////////////////////////////////////
 	/////////////////// Routing ////////////////////
 	///////////////////////////////////////////////
 
-	/////////////////// Users /////////////////////
+	secret := helpers.Mgetenv("JWT_SECRET", "EbnJO3bwmX")
 
+	subRouter := api.Router(db, secret)
+	app.PartyFunc("/", subRouter)
 
-	/////////////////// Users /////////////////////
+	/////////////////////////////////////////////////
+	/////////////////// RUN ////////////////////
+	///////////////////////////////////////////////
 
-	/////////////////// COUNTER /////////////////////
-
-	// Group routes and mvc apps based on /api path prefix.
-	api := app.Party("/api")
-	{
-		// Group based on /api/counter path prefix.
-		counterAPI := api.Party("/counter")
-		// Optionally, a <trick> to keep the `m` local variable
-		// unaccessible outside of this block's scope. That
-		// way you can register many mvc apps for different Parties
-		// with a "m" variable.
-		// Alternatively you can use the mvc.Configure function :)
-
-		// Register a new MVC Application to the counterAPI Party.
-		m := mvc.New(counterAPI)
-		m.Register(
-			// Register a static dependency (static because it doesn't accept an iris.Context,
-			// only one instance of that it's used). Helps us to keep a global counter across
-			// clients requests.
-			services.NewGlobalCounter(),
-			// Register a dynamic dependency (GetFields accepts an iris.Context,
-			// it binds a new instance on every request). Helps us to
-			// set custom fields based on the request handler.
-			accesslog.GetFields,
-		)
-		// Register our controller.
-		m.Handle(new(controllers.Counter))
-	}
-
-	// GET http://localhost:8080/api/counter
-	// POST http://localhost:8080/api/counter/increment
 	app.Listen(":8080", iris.WithOptimizations)
 }
