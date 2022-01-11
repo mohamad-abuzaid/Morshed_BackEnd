@@ -24,13 +24,13 @@ func NewRepository(db Database, of Record) *Repository {
 }
 
 // DB exposes the database instance.
-func (s *Repository) DB() Database {
-	return s.db
+func (r *Repository) DB() Database {
+	return r.db
 }
 
 // RecordInfo returns the record info provided through `NewService`.
-func (s *Repository) RecordInfo() Record {
-	return s.rec
+func (r *Repository) RecordInfo() Record {
+	return r.rec
 }
 
 // ErrNoRows is returned when GET doesn't return a row.
@@ -38,9 +38,9 @@ func (s *Repository) RecordInfo() Record {
 var ErrNoRows = sql.ErrNoRows
 
 // GetByID binds a single record from the databases to the "dest".
-func (s *Repository) GetByID(ctx context.Context, dest interface{}, id int64) error {
-	q := fmt.Sprintf("SELECT * FROM %s WHERE %s = ? LIMIT 1", s.rec.TableName(), s.rec.PrimaryKey())
-	err := s.db.Get(ctx, dest, q, id)
+func (r *Repository) GetByID(ctx context.Context, dest interface{}, id int64) error {
+	q := fmt.Sprintf("SELECT * FROM %s WHERE %s = ? LIMIT 1", r.rec.TableName(), r.rec.PrimaryKey())
+	err := r.db.Get(ctx, dest, q, id)
 	return err
 	// if err != nil {
 	// 	if err == sql.ErrNoRows {
@@ -54,9 +54,9 @@ func (s *Repository) GetByID(ctx context.Context, dest interface{}, id int64) er
 }
 
 // Count returns the total records count in the table.
-func (s *Repository) Count(ctx context.Context) (total int64, err error) {
-	q := fmt.Sprintf("SELECT COUNT(DISTINCT %s) FROM %s", s.rec.PrimaryKey(), s.rec.TableName())
-	if err = s.db.Select(ctx, &total, q); err == sql.ErrNoRows {
+func (r *Repository) Count(ctx context.Context) (total int64, err error) {
+	q := fmt.Sprintf("SELECT COUNT(DISTINCT %s) FROM %s", r.rec.PrimaryKey(), r.rec.TableName())
+	if err = r.db.Select(ctx, &total, q); err == sql.ErrNoRows {
 		err = nil
 	}
 	return
@@ -123,27 +123,27 @@ func ParseListOptions(q url.Values) ListOptions {
 // List binds one or more records from the database to the "dest".
 // If the record supports ordering then it will sort by the `Sorted.OrderBy` column name(s).
 // Use the "order" input parameter to set a descending order ("DESC").
-func (s *Repository) List(ctx context.Context, dest interface{}, opts ListOptions) error {
+func (r *Repository) List(ctx context.Context, dest interface{}, opts ListOptions) error {
 	// Set table and order by column from record info for `List` by options
 	// so it can be more flexible to perform read-only calls of other table's too.
 	if opts.Table == "" {
 		// If missing then try to set it by record info.
-		opts.Table = s.rec.TableName()
+		opts.Table = r.rec.TableName()
 	}
 	if opts.OrderByColumn == "" {
-		if b, ok := s.rec.(Sorted); ok {
+		if b, ok := r.rec.(Sorted); ok {
 			opts.OrderByColumn = b.SortBy()
 		}
 	}
 
 	q, args := opts.BuildQuery()
-	return s.db.Select(ctx, dest, q, args...)
+	return r.db.Select(ctx, dest, q, args...)
 }
 
 // DeleteByID removes a single record of "dest" from the database.
-func (s *Repository) DeleteByID(ctx context.Context, id int64) (int, error) {
-	q := fmt.Sprintf("DELETE FROM %s WHERE %s = ? LIMIT 1", s.rec.TableName(), s.rec.PrimaryKey())
-	res, err := s.db.Exec(ctx, q, id)
+func (r *Repository) DeleteByID(ctx context.Context, id int64) (int, error) {
+	q := fmt.Sprintf("DELETE FROM %s WHERE %s = ? LIMIT 1", r.rec.TableName(), r.rec.PrimaryKey())
+	res, err := r.db.Exec(ctx, q, id)
 	if err != nil {
 		return 0, err
 	}
@@ -162,7 +162,7 @@ var ErrUnprocessable = errors.New("invalid entity")
 // PartialUpdate accepts a columns schema and a key-value map to
 // update the record based on the given "id".
 // Note: Trivial string, int and boolean type validations are performed here.
-func (s *Repository) PartialUpdate(ctx context.Context, id int64, schema map[string]reflect.Kind, attrs map[string]interface{}) (int, error) {
+func (r *Repository) PartialUpdate(ctx context.Context, id int64, schema map[string]reflect.Kind, attrs map[string]interface{}) (int, error) {
 	if len(schema) == 0 || len(attrs) == 0 {
 		return 0, nil
 	}
@@ -202,9 +202,9 @@ func (s *Repository) PartialUpdate(ctx context.Context, id int64, schema map[str
 	}
 
 	q := fmt.Sprintf("UPDATE %s SET %s WHERE %s = ?;",
-		s.rec.TableName(), strings.Join(keyLines, ", "), s.rec.PrimaryKey())
+		r.rec.TableName(), strings.Join(keyLines, ", "), r.rec.PrimaryKey())
 
-	res, err := s.DB().Exec(ctx, q, append(values, id)...)
+	res, err := r.DB().Exec(ctx, q, append(values, id)...)
 	if err != nil {
 		return 0, err
 	}

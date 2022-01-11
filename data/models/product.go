@@ -68,28 +68,3 @@ func (ps *Products) Scan(rows *sql.Rows) (err error) {
 
 	return rows.Err()
 }
-
-/*
-// The requests.
-type (
-	CreateProductRequest struct { // all required.
-		CategoryID  int64  `json:"categoryID"`
-		Title       string `json:"title"`
-		ImageURL    string `json:"imageURL"`
-		Price       float32 `json:"price"`
-		Description string `json:"description"`
-	}
-
-	UpdateProductRequest CreateProductRequest // at least 1 required.
-
-	GetProductRequest struct {
-		ID int64 `json:"id"` // required.
-	}
-
-	DeleteProductRequest GetProductRequest
-
-	GetProductsRequest struct {
-		// [page, offset...]
-	}
-)
-*/

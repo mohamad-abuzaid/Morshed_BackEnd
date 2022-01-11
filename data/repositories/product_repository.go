@@ -26,13 +26,17 @@ func NewProductRepository(db sql.Database) *ProductRepository {
 	return &ProductRepository{Repository: sql.NewRepository(db, new(models.Product))}
 }
 
-func (r *ProductRepository) SELECT(id int64) (models.Product, error) {
-	res, err := r.DB().Exec(r.Ctx, q, e.CategoryID, e.Title, e.ImageURL, e.Price, e.Description)
+func (r *ProductRepository) Size(id int64) (int64, error) {
+	total, err := r.Count(r.Ctx)
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
+	return total, nil
+}
 
-	return res.LastInsertId()
+func (r *ProductRepository) SELECT(id int64) (prod models.Product, err error) {
+	err = r.GetByID(r.Ctx, prod, id)
+	return
 }
 
 // Insert stores a product to the database and returns its ID.

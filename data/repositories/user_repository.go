@@ -6,22 +6,21 @@ import (
 
 	"morshed/data/engine/sql"
 	"morshed/data/models"
+
+	"github.com/kataras/iris/v12"
 )
 
-// Query represents the visitor and action queries.
-type Query func(models.User) bool
+type UserRepository struct {
+	Ctx iris.Context
+	*sql.Repository
+	rec sql.Record
+	mu     sync.RWMutex
+}
 
 // NewUserRepository returns a new user memory-based repository,
 // the one and only repository type in our example.
-func NewUserRepository(source sql.Database) DataRepository {
-	return &userMysqlRepository{source: source}
-}
-
-// userMysqlRepository is a "DataRepository"
-// which manages the users using the memory data source (map).
-type userMysqlRepository struct {
-	source sql.Database
-	mu     sync.RWMutex
+func NewUserRepository(db sql.Database) *UserRepository {
+	return &UserRepository{Repository: sql.NewRepository(db, new(models.User))}
 }
 
 const (
@@ -31,61 +30,22 @@ const (
 	ReadWriteMode
 )
 
-func (r *userMysqlRepository) Exec(query Query, action Query, actionLimit int, mode int) (ok bool) {
-	loops := 0
-
-	if mode == ReadOnlyMode {
-		r.mu.RLock()
-		defer r.mu.RUnlock()
-	} else {
-		r.mu.Lock()
-		defer r.mu.Unlock()
+func (r *UserRepository) Size(id int64) (int64, error) {
+	total, err := r.Count(r.Ctx)
+	if err != nil {
+		return -1, err
 	}
-
-	for _, user := range r.source {
-		ok = query(user)
-		if ok {
-			if action(user) {
-				loops++
-				if actionLimit >= loops {
-					break // break
-				}
-			}
-		}
-	}
-
-	return
+	return total, nil
 }
 
-// Select receives a query function
-// which is fired for every single user model inside
-// our imaginary data source.
-// When that function returns true then it stops the iteration.
-//
-// It returns the query's return last known boolean value
-// and the last known user model
-// to help callers to reduce the LOC.
-//
-// It's actually a simple but very clever prototype function
-// I'm using everywhere since I firstly think of it,
-// hope you'll find it very useful as well.
-func (r *userMysqlRepository) Select(query Query) (user models.User, found bool) {
-	found = r.Exec(query, func(m models.User) bool {
-		user = m
-		return true
-	}, 1, ReadOnlyMode)
-
-	// set an empty models.User if not found at all.
-	if !found {
-		user = models.User{}
-	}
-
+func (r *UserRepository) Select(id int64) (user models.User, err error) {
+	err = r.GetByID(r.Ctx, user, id)
 	return
 }
 
 // SelectMany same as Select but returns one or more models.User as a slice.
 // If limit <=0 then it returns everything.
-func (r *userMysqlRepository) SelectMany(query Query, limit int) (results []models.User) {
+func (r *UserRepository) SelectMany(query Query, limit int) (results []models.User) {
 	r.Exec(query, func(m models.User) bool {
 		results = append(results, m)
 		return true
@@ -97,7 +57,7 @@ func (r *userMysqlRepository) SelectMany(query Query, limit int) (results []mode
 // InsertOrUpdate adds or updates a user to the (memory) storage.
 //
 // Returns the new user and an error if any.
-func (r *userMysqlRepository) InsertOrUpdate(user models.User) (models.User, error) {
+func (r *UserRepository) InsertOrUpdate(user models.User) (models.User, error) {
 	id := user.ID
 
 	if id == 0 { // Create new action
@@ -106,11 +66,11 @@ func (r *userMysqlRepository) InsertOrUpdate(user models.User) (models.User, err
 		// in productions apps you can use a third-party
 		// library to generate a UUID as string.
 		r.mu.RLock()
-		for _, item := range r.source {
-			if item.ID > lastID {
-				lastID = item.ID
-			}
-		}
+		// for _, item := range r.source {
+		// 	if item.ID > lastID {
+		// 		lastID = item.ID
+		// 	}
+		// }
 		r.mu.RUnlock()
 
 		id = lastID + 1
@@ -118,7 +78,7 @@ func (r *userMysqlRepository) InsertOrUpdate(user models.User) (models.User, err
 
 		// map-specific thing
 		r.mu.Lock()
-		r.source[id] = user
+		// r.source[id] = user
 		r.mu.Unlock()
 
 		return user, nil
@@ -148,15 +108,15 @@ func (r *userMysqlRepository) InsertOrUpdate(user models.User) (models.User, err
 
 	// map-specific thing
 	r.mu.Lock()
-	r.source[id] = current
+	// r.source[id] = current
 	r.mu.Unlock()
 
 	return user, nil
 }
 
-func (r *userMysqlRepository) Delete(query Query, limit int) bool {
+func (r *UserRepository) Delete(query Query, limit int) bool {
 	return r.Exec(query, func(m models.User) bool {
-		delete(r.source, m.ID)
+		// delete(r.source, m.ID)
 		return true
 	}, limit, ReadWriteMode)
 }

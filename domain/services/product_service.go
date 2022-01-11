@@ -23,9 +23,7 @@ type ProductService interface {
 
 // NewProductService returns the default product service.
 func NewProductService(repo repositories.ProductRepository) ProductService {
-	return &productService{
-		repo: repo,
-	}
+	return &productService{repo: repo,}
 }
 
 type productService struct {
@@ -46,23 +44,6 @@ func (s *productService) GetByID(id int64) (models.Product, bool) {
 	})
 }
 
-// GetByUsernameAndPassword returns a product based on its username and passowrd,
-// used for authentication.
-func (s *productService) GetByUsernameAndPassword(username, userPassword string) (models.Product, bool) {
-	if username == "" || userPassword == "" {
-		return models.Product{}, false
-	}
-
-	return s.repo.Select(func(m models.Product) bool {
-		if m.Username == username {
-			hashed := m.HashedPassword
-			if ok, _ := models.ValidatePassword(userPassword, hashed); ok {
-				return true
-			}
-		}
-		return false
-	})
-}
 
 // Update updates every field from an existing User,
 // it's not safe to be used via public API,
@@ -73,30 +54,10 @@ func (s *productService) Update(id int64, product models.Product) (models.Produc
 	return s.repo.InsertOrUpdate(product)
 }
 
-// UpdatePassword updates a product's password.
-func (s *productService) UpdatePassword(id int64, newPassword string) (models.Product, error) {
-	// update the product and return it.
-	hashed, err := models.GeneratePassword(newPassword)
-	if err != nil {
-		return models.Product{}, err
-	}
-
-	return s.Update(id, models.Product{
-		HashedPassword: hashed,
-	})
-}
-
-// UpdateUsername updates a product's username.
-func (s *productService) UpdateUsername(id int64, newUsername string) (models.Product, error) {
-	return s.Update(id, models.Product{
-		Username: newUsername,
-	})
-}
-
 // Create inserts a new User,
 // the userPassword is the client-typed password
 // it will be hashed before the insertion to our repository.
-func (s *productService) Create(userPassword string, product models.Product) (models.Product, error) {
+func (s *productService) Create(product models.Product) (models.Product, error) {
 	if product.ID > 0 || userPassword == "" || product.Firstname == "" || product.Username == "" {
 		return models.Product{}, errors.New("unable to create this product")
 	}

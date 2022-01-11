@@ -4,14 +4,17 @@ package api
 import (
 	"time"
 
-	"morshed/data/engine/service"
-	"morshed/data/repositories"
+	"morshed/app/controllers"
 	"morshed/data/engine/sql"
+	"morshed/data/repositories"
+	middleware "morshed/domain/middlewares"
+	"morshed/domain/services"
 
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/jwt"
 	"github.com/kataras/iris/v12/middleware/requestid"
 	"github.com/kataras/iris/v12/mvc"
+	"github.com/kataras/iris/v12/sessions"
 )
 
 // Router accepts any required dependencies and returns the main server's handler.
@@ -31,12 +34,11 @@ func Router(db sql.Database, secret string) func(iris.Party) {
 		// access on create, update and delete endpoinds.
 
 		var (
-			repo := repositories.NewUserRepository(db)
-			userService := services.NewUserService(repo)
+			userRepository = repositories.NewUserRepository(db)
+			userService = services.NewUserService(*userRepository)
 
-			categoryService = service.NewCategoryService(db)
-
-			productService  = service.NewProductService(db)
+			productRepository = repositories.NewProductRepository(db)
+			productService = services.NewProductService(*productRepository)
 		)
 
 		/////////////////// User /////////////////////
@@ -46,7 +48,7 @@ func Router(db sql.Database, secret string) func(iris.Party) {
 			Cookie:  "sessioncookiename",
 			Expires: 24 * time.Hour,
 		})
-		user := mvc.New(app.Party("/user"))
+		user := mvc.New(r.Party("/user"))
 		user.Register(
 			userService,
 			sessManager.Start,
@@ -56,7 +58,7 @@ func Router(db sql.Database, secret string) func(iris.Party) {
 		/////////////////// Users /////////////////////
 
 		// "/users" based mvc application.
-		users := mvc.New(app.Party("/users"))
+		users := mvc.New(r.Party("/users"))
 		// Add the basic authentication(admin:password) middleware
 		// for the /users based requests.
 		users.Router.Use(middleware.BasicAuth)
@@ -64,48 +66,13 @@ func Router(db sql.Database, secret string) func(iris.Party) {
 		users.Register(userService)
 		users.Handle(new(controllers.UsersController))
 
-		/////////////////// Category /////////////////////
-
-		cat := mvc.New(r.Party("/category"))
-		{
-			// TODO: new Use to add middlewares to specific
-			// routes per METHOD ( we already have the per path through parties.)
-			handler := NewCategoryHandler(categoryService)
-
-			cat.Get("/", handler.List)
-			cat.Post("/", handler.Create)
-			cat.Put("/", handler.Update)
-
-			cat.Get("/{id:int64}", handler.GetByID)
-			cat.Patch("/{id:int64}", handler.PartialUpdate)
-			cat.Delete("/{id:int64}", handler.Delete)
-			/* You can also do something like that:
-			cat.PartyFunc("/{id:int64}", func(c iris.Party) {
-				c.Get("/", handler.GetByID)
-				c.Post("/", handler.PartialUpdate)
-				c.Delete("/", handler.Delete)
-			})
-			*/
-
-			cat.Get("/{id:int64}/products", handler.ListProducts)
-			cat.Post("/{id:int64}/products", handler.InsertProducts(productService))
-		}
-
 		/////////////////// Product /////////////////////
 
-		prod := r.Party("/product")
-		{
-			handler := NewProductHandler(productService)
-
-			prod.Get("/", handler.List)
-			prod.Post("/", handler.Create)
-			prod.Put("/", handler.Update)
-
-			prod.Get("/{id:int64}", handler.GetByID)
-			prod.Patch("/{id:int64}", handler.PartialUpdate)
-			prod.Delete("/{id:int64}", handler.Delete)
-		}
-
+		prod := mvc.New(r.Party("/product"))
+		prod.Register(
+			productService,
+		)
+		prod.Handle(new(controllers.ProductController))
 	}
 }
 
