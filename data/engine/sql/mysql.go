@@ -72,30 +72,6 @@ func (db *MySQL) Select(ctx context.Context, dest interface{}, query string, arg
 		return ErrNoRows
 	}
 	return rows.Scan(dest)
-
-	/* Uncomment this and pass a slice if u want to see reflection powers <3
-	v, ok := dest.(reflect.Value)
-	if !ok {
-		v = reflect.Indirect(reflect.ValueOf(dest))
-	}
-
-	sliceTyp := v.Type()
-
-	if sliceTyp.Kind() != reflect.Slice {
-		sliceTyp = reflect.SliceOf(sliceTyp)
-	}
-
-	sliceElementTyp := deref(sliceTyp.Elem())
-	for rows.Next() {
-		obj := reflect.New(sliceElementTyp)
-		obj.Interface().(Scannable).Scan(rows)
-		if err != nil {
-			return err
-		}
-
-		v.Set(reflect.Append(v, reflect.Indirect(obj)))
-	}
-	*/
 }
 
 // Get same as `Select` but it moves the cursor to the first result.

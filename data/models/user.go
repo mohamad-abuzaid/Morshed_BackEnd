@@ -18,7 +18,7 @@ type User struct {
 	ID             int64     `db:"id" json:"id" form:"id"`
 	Firstname      string    `db:"firstname" json:"firstname" form:"firstname"`
 	Username       string    `db:"username" json:"username" form:"username"`
-	HashedPassword []byte    `db:"_" json:"-" form:"-"`
+	HashedPassword []byte    `db:"hashpass" json:"-" form:"-"`
 	CreatedAt   *time.Time `db:"created_at" json:"created_at" form:"created_at"`
 	UpdatedAt   *time.Time `db:"updated_at" json:"updated_at" form:"updated_at"`
 }
@@ -37,6 +37,11 @@ func (u *User) PrimaryKey() string {
 // should be used as a fallback for sorting a set of User.
 func (u *User) SortBy() string {
 	return "updated_at"
+}
+
+// ValidateInsert simple check for empty fields that should be required.
+func (u *User) ValidateInsert() bool {
+	return u.Firstname != ""  && u.Username != ""
 }
 
 // Scan binds mysql rows to this User.

@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"morshed/data/engine/sql"
 	"morshed/data/models"
 	"morshed/domain/services"
+	"morshed/helpers"
 
 	"github.com/kataras/iris/v12"
 )
@@ -22,7 +24,7 @@ type UsersController struct {
 
 	// Our UserService, it's an interface which
 	// is binded from the main application.
-	Service services.ProductService
+	Service services.UserService
 }
 
 // Get returns list of the users.
@@ -39,50 +41,119 @@ type UsersController struct {
 // 	return
 // }
 // otherwise just return the datamodels.
-func (c *UsersController) Get() (results []models.User) {
-	return c.Service.GetAll()
+func (c *UsersController) Get() ([]models.User, error) {
+	users, err := c.Service.GetAll()
+	return users, err
 }
 
 // GetBy returns a user.
 // Demo:
 // curl -i -u admin:password http://localhost:8080/users/1
-func (c *UsersController) GetBy(id int64) (user models.User, found bool) {
-	u, found := c.Service.GetByID(id)
-	if !found {
+func (c *UsersController) GetBy(id int64) (models.User, error) {
+	user, err := c.Service.GetByID(id)
+	if err != nil {
 		// this message will be binded to the
 		// main.go -> app.OnAnyErrorCode -> NotFound -> shared/error.html -> .Message text.
 		c.Ctx.Values().Set("message", "User couldn't be found!")
 	}
-	return u, found // it will throw/emit 404 if found == false.
+	return user, err // it will throw/emit 404 if found == false.
 }
 
-// PutBy updates a user.
-// Demo:
-// curl -i -X PUT -u admin:password -F "username=kataras"
-// -F "password=rawPasswordIsNotSafeIfOrNotHTTPs_You_Should_Use_A_client_side_lib_for_hash_as_well"
-// http://localhost:8080/users/1
-func (c *UsersController) PutBy(id int64) (models.User, error) {
-	// username := c.Ctx.FormValue("username")
-	// password := c.Ctx.FormValue("password")
-	u := models.User{}
-	if err := c.Ctx.ReadForm(&u); err != nil {
-		return u, err
+func (h *UsersController) Post() {
+	var user models.User
+	if err := h.Ctx.ReadJSON(&user); err != nil {
+		return
 	}
 
-	return c.Service.Update(id, u)
+	id, err := h.Service.Create(user)
+	if err != nil {
+		if err == sql.ErrUnprocessable {
+			h.Ctx.StopWithJSON(iris.StatusUnprocessableEntity, helpers.MnewError(iris.StatusUnprocessableEntity, h.Ctx.Request().Method, h.Ctx.Path(), "required fields are missing"))
+			return
+		}
+
+		helpers.Mdebugf("ProductHandler.Create(DB): %v", err)
+		helpers.MwriteInternalServerError(h.Ctx)
+		return
+	}
+
+	// Send 201 with body of {"id":$last_inserted_id"}.
+	h.Ctx.StatusCode(iris.StatusCreated)
+	h.Ctx.JSON(iris.Map{user.PrimaryKey(): id})
 }
 
-// DeleteBy deletes a user.
-// Demo:
-// curl -i -X DELETE -u admin:password http://localhost:8080/users/1
-func (c *UsersController) DeleteBy(id int64) interface{} {
-	wasDel := c.Service.DeleteByID(id)
-	if wasDel {
-		// return the deleted user's ID
-		return map[string]interface{}{"deleted": id}
+func (h *UsersController) Put() {
+	var user models.User
+	if err := h.Ctx.ReadJSON(&user); err != nil {
+		return
 	}
-	// right here we can see that a method function
-	// can return any of those two types(map or int),
-	// we don't have to specify the return type to a specific type.
-	return iris.StatusBadRequest // same as 400.
+
+	user, err := h.Service.Update(user)
+	if err != nil {
+		if err == sql.ErrUnprocessable {
+			h.Ctx.StopWithJSON(iris.StatusUnprocessableEntity,
+				helpers.MnewError(iris.StatusUnprocessableEntity,
+					h.Ctx.Request().Method, h.Ctx.Path(), "required fields are missing"))
+			return
+		}
+
+		helpers.Mdebugf("ProductHandler.Update(DB): %v", err)
+		helpers.MwriteInternalServerError(h.Ctx)
+		return
+	}
+
+	status := iris.StatusOK
+	if user.ID <= 0 {
+		status = iris.StatusNotModified
+	}
+
+	h.Ctx.StatusCode(status)
+}
+
+func (h *UsersController) Patch() {
+	id := h.Ctx.Params().GetInt64Default("id", 0)
+
+	var attrs map[string]interface{}
+	if err := h.Ctx.ReadJSON(&attrs); err != nil {
+		return
+	}
+
+	affected, err := h.Service.PatchUpdate(id, attrs)
+	if err != nil {
+		if err == sql.ErrUnprocessable {
+			h.Ctx.StopWithJSON(iris.StatusUnprocessableEntity,
+				helpers.MnewError(iris.StatusUnprocessableEntity,
+					h.Ctx.Request().Method, h.Ctx.Path(), "unsupported value(s)"))
+			return
+		}
+
+		helpers.Mdebugf("ProductHandler.PartialUpdate(DB): %v", err)
+		helpers.MwriteInternalServerError(h.Ctx)
+		return
+	}
+
+	status := iris.StatusOK
+	if affected == 0 {
+		status = iris.StatusNotModified
+	}
+
+	h.Ctx.StatusCode(status)
+}
+
+func (h *UsersController) Delete() {
+	id := h.Ctx.Params().GetInt64Default("id", 0)
+
+	affected, err := h.Service.DeleteByID(id)
+	if err != nil {
+		helpers.Mdebugf("ProductHandler.Delete(DB): %v", err)
+		helpers.MwriteInternalServerError(h.Ctx)
+		return
+	}
+
+	status := iris.StatusOK // StatusNoContent
+	if affected == 0 {
+		status = iris.StatusNotModified
+	}
+
+	h.Ctx.StatusCode(status)
 }

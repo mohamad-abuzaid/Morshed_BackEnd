@@ -66,8 +66,8 @@ func (c *Cache) Get(ctx context.Context, key string, dest groupcache.Sink) error
 		}
 
 		switch c.service.RecordInfo().(type) {
-		case *models.Category:
-			v = new(models.Category)
+		case *models.User:
+			v = new(models.User)
 		case *models.Product:
 			v = new(models.Product)
 		}
@@ -86,8 +86,8 @@ func (c *Cache) Get(ctx context.Context, key string, dest groupcache.Sink) error
 		opts := sql.ParseListOptions(q)
 
 		switch c.service.RecordInfo().(type) {
-		case *models.Category:
-			v = new(models.Categories)
+		case *models.User:
+			v = new(models.Users)
 		case *models.Product:
 			v = new(models.Products)
 		}

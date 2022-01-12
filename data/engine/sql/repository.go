@@ -37,22 +37,6 @@ func (r *Repository) RecordInfo() Record {
 // A shortcut of sql.ErrNoRows.
 var ErrNoRows = sql.ErrNoRows
 
-// GetByID binds a single record from the databases to the "dest".
-func (r *Repository) GetByID(ctx context.Context, dest interface{}, id int64) error {
-	q := fmt.Sprintf("SELECT * FROM %s WHERE %s = ? LIMIT 1", r.rec.TableName(), r.rec.PrimaryKey())
-	err := r.db.Get(ctx, dest, q, id)
-	return err
-	// if err != nil {
-	// 	if err == sql.ErrNoRows {
-	// 		return false, nil
-	// 	}
-
-	// 	return false, err
-	// }
-
-	// return true, nil
-}
-
 // Count returns the total records count in the table.
 func (r *Repository) Count(ctx context.Context) (total int64, err error) {
 	q := fmt.Sprintf("SELECT COUNT(DISTINCT %s) FROM %s", r.rec.PrimaryKey(), r.rec.TableName())
@@ -60,6 +44,60 @@ func (r *Repository) Count(ctx context.Context) (total int64, err error) {
 		err = nil
 	}
 	return
+}
+
+// GetByID binds a single record from the databases to the "dest".
+func (r *Repository) GetByID(ctx context.Context, dest interface{}, id int64) error {
+	q := fmt.Sprintf("SELECT * FROM %s WHERE %s = ? LIMIT 1", r.rec.TableName(), r.rec.PrimaryKey())
+	err := r.db.Get(ctx, dest, q, id)
+	return err
+}
+
+func (r *Repository) GetByAttrs(ctx context.Context, dest interface{}, attrs map[string]interface{}) error {
+	if len(attrs) == 0 {
+		return nil
+	}
+
+	var (
+		keyLines []string
+		values   []interface{}
+	)
+
+	for k, v := range attrs {
+		keyLines = append(keyLines, fmt.Sprintf("%s = ?", k))
+		values = append(values, v)
+	}
+
+	if len(values) == 0 {
+		return nil
+	}
+
+	q := fmt.Sprintf("SELECT * FROM %s WHERE %s;",
+		r.rec.TableName(), strings.Join(keyLines, ", "))
+
+	err := r.db.Get(ctx, dest, q, values...)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Repository) GetAll(ctx context.Context, dest interface{}) error {
+	q := fmt.Sprintf("SELECT * FROM %s", r.rec.TableName())
+	err := r.db.Get(ctx, dest, q)
+	return err
+}
+
+// DeleteByID removes a single record of "dest" from the database.
+func (r *Repository) DeleteByID(ctx context.Context, id int64) (int, error) {
+	q := fmt.Sprintf("DELETE FROM %s WHERE %s = ? LIMIT 1", r.rec.TableName(), r.rec.PrimaryKey())
+	res, err := r.db.Exec(ctx, q, id)
+	if err != nil {
+		return 0, err
+	}
+
+	return GetAffectedRows(res), nil
 }
 
 // ListOptions holds the options to be passed on the `Service.List` method.
@@ -138,17 +176,6 @@ func (r *Repository) List(ctx context.Context, dest interface{}, opts ListOption
 
 	q, args := opts.BuildQuery()
 	return r.db.Select(ctx, dest, q, args...)
-}
-
-// DeleteByID removes a single record of "dest" from the database.
-func (r *Repository) DeleteByID(ctx context.Context, id int64) (int, error) {
-	q := fmt.Sprintf("DELETE FROM %s WHERE %s = ? LIMIT 1", r.rec.TableName(), r.rec.PrimaryKey())
-	res, err := r.db.Exec(ctx, q, id)
-	if err != nil {
-		return 0, err
-	}
-
-	return GetAffectedRows(res), nil
 }
 
 // ErrUnprocessable indicates error caused by invalid entity (entity's key-values).

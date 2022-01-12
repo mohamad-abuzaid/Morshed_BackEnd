@@ -18,11 +18,11 @@ func Mdebugf(format string, args ...interface{}) {
 }
 
 func MwriteInternalServerError(ctx iris.Context) {
-	ctx.StopWithJSON(iris.StatusInternalServerError, newError(iris.StatusInternalServerError, ctx.Request().Method, ctx.Path(), ""))
+	ctx.StopWithJSON(iris.StatusInternalServerError, MnewError(iris.StatusInternalServerError, ctx.Request().Method, ctx.Path(), ""))
 }
 
 func MwriteEntityNotFound(ctx iris.Context) {
-	ctx.StopWithJSON(iris.StatusNotFound, newError(iris.StatusNotFound, ctx.Request().Method, ctx.Path(), "entity does not exist"))
+	ctx.StopWithJSON(iris.StatusNotFound, MnewError(iris.StatusNotFound, ctx.Request().Method, ctx.Path(), "entity does not exist"))
 }
 
 func Mgetenv(key string, def string) string {

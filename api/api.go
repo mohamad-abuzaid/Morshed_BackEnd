@@ -35,10 +35,10 @@ func Router(db sql.Database, secret string) func(iris.Party) {
 
 		var (
 			userRepository = repositories.NewUserRepository(db)
-			userService = services.NewUserService(*userRepository)
+			userService = services.NewUserService(userRepository)
 
 			productRepository = repositories.NewProductRepository(db)
-			productService = services.NewProductService(*productRepository)
+			productService = services.NewProductService(productRepository)
 		)
 
 		/////////////////// User /////////////////////

@@ -1,10 +1,10 @@
 package services
 
 import (
-	"errors"
-
 	"morshed/data/models"
-	"morshed/data/repositories"
+	repo "morshed/domain/repositories"
+
+	"github.com/kataras/iris/v12"
 )
 
 // ProductService handles CRUID operations of a product datamodel,
@@ -14,68 +14,72 @@ import (
 // It's an interface and it's used as interface everywhere
 // because we may need to change or try an experimental different domain logic at the future.
 type ProductService interface {
-	GetAll() []models.Product
-	GetByID(id int64) (models.Product, bool)
-	DeleteByID(id int64) bool
-	Update(id int64, product models.Product) (models.Product, error)
-	Create(product models.Product) (models.Product, error)
+	Count(int64) (int64, error)
+	GetByID(int64) (models.Product, error)
+	GetByAttrs(map[string]interface{}) (models.Product, error)
+	GetAll() ([]models.Product, error)
+	DeleteByID(int64) (int, error)
+	Create(models.Product) (models.Product, error)
+	InsertAll([]interface{}) (int, error)
+	Update(models.Product) (models.Product, error)
+	PatchUpdate(int64, map[string]interface{}) (int, error)
 }
 
 // NewProductService returns the default product service.
-func NewProductService(repo repositories.ProductRepository) ProductService {
-	return &productService{repo: repo,}
+func NewProductService(repo repo.DataRepository) ProductService {
+	return &productService{repo: repo}
 }
 
 type productService struct {
-	repo repositories.ProductRepository
+	Ctx  iris.Context
+	repo repo.DataRepository
 }
 
-// GetAll returns all users.
-func (s *productService) GetAll() []models.Product {
-	return s.repo.SelectMany(func(_ models.Product) bool {
-		return true
-	}, -1)
+func (s *productService) Count(id int64) (int64, error) {
+	total, err := s.repo.Size(id)
+	return total, err
 }
 
-// GetByID returns a product based on its id.
-func (s *productService) GetByID(id int64) (models.Product, bool) {
-	return s.repo.Select(func(m models.Product) bool {
-		return m.ID == id
-	})
+func (s *productService) GetByID(id int64) (models.Product, error) {
+	prod, err := s.repo.Select(id)
+	return prod.(models.Product), err
 }
 
-
-// Update updates every field from an existing User,
-// it's not safe to be used via public API,
-// however we will use it on the web/controllers/user_controller.go#PutBy
-// in order to show you how it works.
-func (s *productService) Update(id int64, product models.Product) (models.Product, error) {
-	product.ID = id
-	return s.repo.InsertOrUpdate(product)
+func (s *productService) GetByAttrs(attrs map[string]interface{}) (models.Product, error) {
+	prod, err := s.repo.SelectByAttrs(attrs)
+	return prod.(models.Product), err
 }
 
-// Create inserts a new User,
-// the userPassword is the client-typed password
-// it will be hashed before the insertion to our repository.
+func (s *productService) GetAll() ([]models.Product, error) {
+	ps, err := s.repo.SelectAll()
+	var prods []models.Product
+	for _, v := range ps {
+		prods = append(prods, v.(models.Product))
+	}
+	return prods, err
+}
+
+func (s *productService) DeleteByID(id int64) (int, error) {
+	row, err := s.repo.Delete(id)
+	return row, err
+}
+
 func (s *productService) Create(product models.Product) (models.Product, error) {
-	if product.ID > 0 || userPassword == "" || product.Firstname == "" || product.Username == "" {
-		return models.Product{}, errors.New("unable to create this product")
-	}
-
-	hashed, err := models.GeneratePassword(userPassword)
-	if err != nil {
-		return models.Product{}, err
-	}
-	product.HashedPassword = hashed
-
-	return s.repo.InsertOrUpdate(product)
+	prod, err := s.repo.Insert(product)
+	return prod.(models.Product), err
 }
 
-// DeleteByID deletes a product by its id.
-//
-// Returns true if deleted otherwise false.
-func (s *productService) DeleteByID(id int64) bool {
-	return s.repo.Delete(func(m models.Product) bool {
-		return m.ID == id
-	}, 1)
+func (s *productService) InsertAll(products []interface{}) (int, error) {
+	len, err := s.repo.BatchInsert(products)
+	return len, err
+}
+
+func (s *productService) Update(product models.Product) (models.Product, error) {
+	prod, err := s.repo.Update(product)
+	return prod.(models.Product), err
+}
+
+func (s *productService) PatchUpdate(id int64, attr map[string]interface{}) (int, error) {
+	row, err := s.repo.PartialUpdate(id, attr)
+	return row, err
 }

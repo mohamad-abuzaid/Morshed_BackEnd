@@ -2,9 +2,10 @@ package services
 
 import (
 	"errors"
-
 	"morshed/data/models"
-	"morshed/data/repositories"
+	repo "morshed/domain/repositories"
+
+	"github.com/kataras/iris/v12"
 )
 
 // UserService handles CRUID operations of a user datamodel,
@@ -14,92 +15,78 @@ import (
 // It's an interface and it's used as interface everywhere
 // because we may need to change or try an experimental different domain logic at the future.
 type UserService interface {
-	GetAll() []models.User
-	GetByID(id int64) (models.User, bool)
-	GetByUsernameAndPassword(username, userPassword string) (models.User, bool)
-	DeleteByID(id int64) bool
-
-	Update(id int64, user models.User) (models.User, error)
-	UpdatePassword(id int64, newPassword string) (models.User, error)
-	UpdateUsername(id int64, newUsername string) (models.User, error)
-
-	Create(userPassword string, user models.User) (models.User, error)
+	Count(int64) (int64, error)
+	GetByID(int64) (models.User, error)
+	GetByAttrs(map[string]interface{}) (models.User, error)
+	GetAll() ([]models.User, error)
+	DeleteByID(int64) (int, error)
+	Create(models.User) (models.User, error)
+	InsertAll([]interface{}) (int, error)
+	Update(models.User) (models.User, error)
+	PatchUpdate(int64, map[string]interface{}) (int, error)
+	CreateUser(string, models.User) (models.User, error)
 }
 
 // NewUserService returns the default user service.
-func NewUserService(repo repositories.UserRepository) UserService {
-	return &userService{repo: repo,}
+func NewUserService(repo repo.DataRepository) UserService {
+	return &userService{repo: repo}
 }
 
 type userService struct {
-	repo repositories.UserRepository
+	Ctx  iris.Context
+	repo repo.DataRepository
 }
 
-// GetAll returns all users.
-func (s *userService) GetAll() []models.User {
-	return s.repo.SelectMany(func(_ models.User) bool {
-		return true
-	}, -1)
+func (s *userService) Count(id int64) (int64, error) {
+	total, err := s.repo.Size(id)
+	return total, err
 }
 
-// GetByID returns a user based on its id.
-func (s *userService) GetByID(id int64) (models.User, bool) {
-	return s.repo.Select(func(m models.User) bool {
-		return m.ID == id
-	})
+func (s *userService) GetByID(id int64) (models.User, error) {
+	user, err := s.repo.Select(id)
+	return user.(models.User), err
 }
 
-// GetByUsernameAndPassword returns a user based on its username and passowrd,
-// used for authentication.
-func (s *userService) GetByUsernameAndPassword(username, userPassword string) (models.User, bool) {
-	if username == "" || userPassword == "" {
-		return models.User{}, false
+func (s *userService) GetByAttrs(attrs map[string]interface{}) (models.User, error) {
+	user, err := s.repo.SelectByAttrs(attrs)
+	return user.(models.User), err
+}
+
+func (s *userService) GetAll() ([]models.User, error) {
+	us, err := s.repo.SelectAll()
+	var prods []models.User
+	for _, v := range us {
+		prods = append(prods, v.(models.User))
 	}
-
-	return s.repo.Select(func(m models.User) bool {
-		if m.Username == username {
-			hashed := m.HashedPassword
-			if ok, _ := models.ValidatePassword(userPassword, hashed); ok {
-				return true
-			}
-		}
-		return false
-	})
+	return prods, err
 }
 
-// Update updates every field from an existing User,
-// it's not safe to be used via public API,
-// however we will use it on the web/controllers/user_controller.go#PutBy
-// in order to show you how it works.
-func (s *userService) Update(id int64, user models.User) (models.User, error) {
-	user.ID = id
-	return s.repo.InsertOrUpdate(user)
+func (s *userService) DeleteByID(id int64) (int, error) {
+	row, err := s.repo.Delete(id)
+	return row, err
 }
 
-// UpdatePassword updates a user's password.
-func (s *userService) UpdatePassword(id int64, newPassword string) (models.User, error) {
-	// update the user and return it.
-	hashed, err := models.GeneratePassword(newPassword)
-	if err != nil {
-		return models.User{}, err
-	}
-
-	return s.Update(id, models.User{
-		HashedPassword: hashed,
-	})
+func (s *userService) Create(user models.User) (models.User, error) {
+	us, err := s.repo.Insert(user)
+	return us.(models.User), err
 }
 
-// UpdateUsername updates a user's username.
-func (s *userService) UpdateUsername(id int64, newUsername string) (models.User, error) {
-	return s.Update(id, models.User{
-		Username: newUsername,
-	})
+func (s *userService) InsertAll(users []interface{}) (int, error) {
+	len, err := s.repo.BatchInsert(users)
+	return len, err
 }
 
-// Create inserts a new User,
-// the userPassword is the client-typed password
-// it will be hashed before the insertion to our repository.
-func (s *userService) Create(userPassword string, user models.User) (models.User, error) {
+func (s *userService) Update(user models.User) (models.User, error) {
+	us, err := s.repo.Update(user)
+	return us.(models.User), err
+}
+
+func (s *userService) PatchUpdate(id int64, attr map[string]interface{}) (int, error) {
+	row, err := s.repo.PartialUpdate(id, attr)
+	return row, err
+}
+
+func (s *userService) CreateUser(userPassword string, user models.User) (models.User, error) {
 	if user.ID > 0 || userPassword == "" || user.Firstname == "" || user.Username == "" {
 		return models.User{}, errors.New("unable to create this user")
 	}
@@ -110,14 +97,6 @@ func (s *userService) Create(userPassword string, user models.User) (models.User
 	}
 	user.HashedPassword = hashed
 
-	return s.repo.InsertOrUpdate(user)
-}
-
-// DeleteByID deletes a user by its id.
-//
-// Returns true if deleted otherwise false.
-func (s *userService) DeleteByID(id int64) bool {
-	return s.repo.Delete(func(m models.User) bool {
-		return m.ID == id
-	}, 1)
+	us, err := s.repo.Insert(user)
+	return us.(models.User), err
 }

@@ -51,7 +51,7 @@ func (c *UserController) logout() {
 }
 
 var registerStaticView = mvc.View{
-	Name: "user/register.html",
+	Name: "views/auth/register.html",
 	Data: iris.Map{"Title": "User Registration"},
 }
 
@@ -74,7 +74,7 @@ func (c *UserController) PostRegister() mvc.Result {
 	)
 
 	// create the new user, the password will be hashed by the service.
-	u, err := c.Service.Create(password, models.User{
+	u, err := c.Service.CreateUser(password, models.User{
 		Username:  username,
 		Firstname: firstname,
 	})
@@ -88,7 +88,7 @@ func (c *UserController) PostRegister() mvc.Result {
 		// if not nil then this error will be shown instead.
 		Err: err,
 		// redirect to /user/me.
-		Path: "/user/me",
+		Path: "/views/auth/me",
 		// When redirecting from POST to GET request you -should- use this HTTP status code,
 		// however there're some (complicated) alternatives if you
 		// search online or even the HTTP RFC.
@@ -99,7 +99,7 @@ func (c *UserController) PostRegister() mvc.Result {
 }
 
 var loginStaticView = mvc.View{
-	Name: "user/login.html",
+	Name: "views/auth/login.html",
 	Data: iris.Map{"Title": "User Login"},
 }
 
@@ -120,9 +120,10 @@ func (c *UserController) PostLogin() mvc.Result {
 		password = c.Ctx.FormValue("password")
 	)
 
-	u, found := c.Service.GetByUsernameAndPassword(username, password)
+	attrs := map[string]interface{}{"username": username, "password": password}
+	u, err := c.Service.GetByAttrs(attrs)
 
-	if !found {
+	if err != nil {
 		return mvc.Response{
 			Path: "/user/register",
 		}
@@ -142,8 +143,8 @@ func (c *UserController) GetMe() mvc.Result {
 		return mvc.Response{Path: "/user/login"}
 	}
 
-	u, found := c.Service.GetByID(c.getCurrentUserID())
-	if !found {
+	u, err := c.Service.GetByID(c.getCurrentUserID())
+	if err != nil {
 		// if the  session exists but for some reason the user doesn't exist in the "database"
 		// then logout and re-execute the function, it will redirect the client to the
 		// /user/login page.
@@ -152,7 +153,7 @@ func (c *UserController) GetMe() mvc.Result {
 	}
 
 	return mvc.View{
-		Name: "user/me.html",
+		Name: "views/auth/me.html",
 		Data: iris.Map{
 			"Title": "Profile of " + u.Username,
 			"User":  u,
