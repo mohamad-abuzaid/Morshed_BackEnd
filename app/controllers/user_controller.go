@@ -11,14 +11,14 @@ import (
 	"github.com/kataras/iris/v12/sessions"
 )
 
-// UserController is our /user controller.
+// UserController is our /auth controller.
 // UserController is responsible to handle the following requests:
-// GET  			/user/register
-// POST 			/user/register
-// GET 				/user/login
-// POST 			/user/login
-// GET 				/user/me
-// All HTTP Methods /user/logout
+// GET  			/auth/register
+// POST 			/auth/register
+// GET 				/auth/login
+// POST 			/auth/login
+// GET 				/auth/me
+// All HTTP Methods /auth/logout
 type UserController struct {
 	// context is auto-binded by Iris on each request,
 	// remember that on each incoming request iris creates a new UserController each time,
@@ -51,11 +51,11 @@ func (c *UserController) logout() {
 }
 
 var registerStaticView = mvc.View{
-	Name: "views/auth/register.html",
+	Name: "auth/register.html",
 	Data: iris.Map{"Title": "User Registration"},
 }
 
-// GetRegister handles GET: http://localhost:8080/user/register.
+// GetRegister handles GET: http://localhost:8080/auth/register.
 func (c *UserController) GetRegister() mvc.Result {
 	if c.isLoggedIn() {
 		c.logout()
@@ -64,7 +64,7 @@ func (c *UserController) GetRegister() mvc.Result {
 	return registerStaticView
 }
 
-// PostRegister handles POST: http://localhost:8080/user/register.
+// PostRegister handles POST: http://localhost:8080/auth/register.
 func (c *UserController) PostRegister() mvc.Result {
 	// get firstname, username and password from the form.
 	var (
@@ -87,8 +87,8 @@ func (c *UserController) PostRegister() mvc.Result {
 	return mvc.Response{
 		// if not nil then this error will be shown instead.
 		Err: err,
-		// redirect to /user/me.
-		Path: "/views/auth/me",
+		// redirect to /auth/me.
+		Path: "/auth/me",
 		// When redirecting from POST to GET request you -should- use this HTTP status code,
 		// however there're some (complicated) alternatives if you
 		// search online or even the HTTP RFC.
@@ -99,11 +99,11 @@ func (c *UserController) PostRegister() mvc.Result {
 }
 
 var loginStaticView = mvc.View{
-	Name: "views/auth/login.html",
+	Name: "auth/login.html",
 	Data: iris.Map{"Title": "User Login"},
 }
 
-// GetLogin handles GET: http://localhost:8080/user/login.
+// GetLogin handles GET: http://localhost:8080/auth/login.
 func (c *UserController) GetLogin() mvc.Result {
 	if c.isLoggedIn() {
 		// if it's already logged in then destroy the previous session.
@@ -113,7 +113,7 @@ func (c *UserController) GetLogin() mvc.Result {
 	return loginStaticView
 }
 
-// PostLogin handles POST: http://localhost:8080/user/login.
+// PostLogin handles POST: http://localhost:8080/auth/login.
 func (c *UserController) PostLogin() mvc.Result {
 	var (
 		username = c.Ctx.FormValue("username")
@@ -125,35 +125,35 @@ func (c *UserController) PostLogin() mvc.Result {
 
 	if err != nil {
 		return mvc.Response{
-			Path: "/user/register",
+			Path: "/auth/register",
 		}
 	}
 
 	c.Session.Set(userIDKey, u.ID)
 
 	return mvc.Response{
-		Path: "/user/me",
+		Path: "/auth/me",
 	}
 }
 
-// GetMe handles GET: http://localhost:8080/user/me.
+// GetMe handles GET: http://localhost:8080/auth/me.
 func (c *UserController) GetMe() mvc.Result {
 	if !c.isLoggedIn() {
 		// if it's not logged in then redirect user to the login page.
-		return mvc.Response{Path: "/user/login"}
+		return mvc.Response{Path: "/auth/login"}
 	}
 
 	u, err := c.Service.GetByID(c.getCurrentUserID())
 	if err != nil {
 		// if the  session exists but for some reason the user doesn't exist in the "database"
 		// then logout and re-execute the function, it will redirect the client to the
-		// /user/login page.
+		// /auth/login page.
 		c.logout()
 		return c.GetMe()
 	}
 
 	return mvc.View{
-		Name: "views/auth/me.html",
+		Name: "auth/me.html",
 		Data: iris.Map{
 			"Title": "Profile of " + u.Username,
 			"User":  u,
@@ -161,11 +161,11 @@ func (c *UserController) GetMe() mvc.Result {
 	}
 }
 
-// AnyLogout handles All/Any HTTP Methods for: http://localhost:8080/user/logout.
+// AnyLogout handles All/Any HTTP Methods for: http://localhost:8080/auth/logout.
 func (c *UserController) AnyLogout() {
 	if c.isLoggedIn() {
 		c.logout()
 	}
 
-	c.Ctx.Redirect("/user/login")
+	c.Ctx.Redirect("/auth/login")
 }

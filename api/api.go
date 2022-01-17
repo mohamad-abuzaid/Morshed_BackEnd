@@ -35,20 +35,20 @@ func Router(db sql.Database, secret string) func(iris.Party) {
 
 		var (
 			userRepository = repositories.NewUserRepository(db)
-			userService = services.NewUserService(userRepository)
+			userService    = services.NewUserService(userRepository)
 
 			productRepository = repositories.NewProductRepository(db)
-			productService = services.NewProductService(productRepository)
+			productService    = services.NewProductService(productRepository)
 		)
 
 		/////////////////// User /////////////////////
 
 		// "/user" based mvc application.
 		sessManager := sessions.New(sessions.Config{
-			Cookie:  "sessioncookiename",
-			Expires: 24 * time.Hour,
+			Cookie:  "morshed_cookie",
+			Expires: 120 * time.Hour,
 		})
-		user := mvc.New(r.Party("/user"))
+		user := mvc.New(r.Party("/auth"))
 		user.Register(
 			userService,
 			sessManager.Start,

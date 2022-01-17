@@ -30,10 +30,10 @@ func StartMySql(engine Engine) (sql.Database, error) {
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:3306)/%s?parseTime=true&charset=utf8mb4&collation=utf8mb4_unicode_ci",
-		helpers.Mgetenv("MYSQL_USER", "user_myapp"),
-		helpers.Mgetenv("MYSQL_PASSWORD", "dbpassword"),
-		helpers.Mgetenv("MYSQL_HOST", "localhost"),
-		helpers.Mgetenv("MYSQL_DATABASE", "myapp"),
+		helpers.Mgetenv("MYSQL_USER", "root"),
+		helpers.Mgetenv("MYSQL_PASSWORD", "BugSquad#2022"),
+		helpers.Mgetenv("MYSQL_HOST", "127.0.0.1"),
+		helpers.Mgetenv("MYSQL_DATABASE", "morshed-db"),
 	)
 
 	db, err := sql.ConnectMySQL(dsn)

@@ -31,9 +31,9 @@ func main() {
 	// You got full debug messages, useful when using MVC and you want to make
 	// sure that your code is aligned with the Iris' MVC Architecture.
 	app.Logger().SetLevel("debug")
-	
+
 	// Load the template files.
-	tmpl := iris.HTML("./app/views", ".html").
+	tmpl := iris.HTML("./app/views/", ".html").
 		Layout("shared/layout.html").
 		Reload(true)
 	app.RegisterView(tmpl)
@@ -67,22 +67,12 @@ func main() {
 	app.HandleDir("/goadmin/uploads", "./goadmin/uploads", iris.DirOptions{
 		IndexName: "/index.html",
 		//Gzip:      false,
-		ShowList:  false,
+		ShowList: false,
 	})
 
-	go func() {
-		_ = app.Run(iris.Addr(":80"))
-	}()
-
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-	log.Print("closing database connection")
-	eng.MysqlConnection().Close()
-	
 	/////////////////////////////////////////////////
 	////////////////// DataSource //////////////////
-	
+
 	// Prepare our repositories and services.
 	db, err := datasource.StartMySql(datasource.MySQL)
 	if err != nil {
@@ -100,8 +90,18 @@ func main() {
 	app.PartyFunc("/", subRouter)
 
 	/////////////////////////////////////////////////
-	/////////////////// RUN ////////////////////
+	//////////////////// RUN ///////////////////////
 	///////////////////////////////////////////////
 
-	app.Listen(":8080", iris.WithOptimizations)
+	app.Listen(":80", iris.WithOptimizations)
+
+	go func() {
+		_ = app.Run(iris.Addr(":80"))
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	log.Print("closing database connection")
+	eng.MysqlConnection().Close()
 }

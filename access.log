@@ -6,3 +6,128 @@
 2022-01-09 20:45:16|35.046µs|200|POST|/api/counter/increment|::1|counter=2|0 B|0 B||
 2022-01-09 20:45:16|29.348µs|200|POST|/api/counter/increment|::1|counter=3|0 B|0 B||
 2022-01-09 20:45:16|34.034µs|200|POST|/api/counter/increment|::1|counter=4|0 B|0 B||
+2022-01-17 19:05:32|222.825µs|304|GET|/|::1|0 B|0 B||
+2022-01-17 19:05:32|112.712µs|304|GET|/build/bundle.js|::1|file=build/bundle.js|0 B|0 B||
+2022-01-17 19:05:33|52.48µs|404|GET|/api/counter|::1|0 B|0 B||
+2022-01-17 19:05:33|1.252507ms|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 19:05:42|75.59µs|302|GET|/karakon|::1|0 B|0 B||
+2022-01-17 19:05:42|1.037376ms|200|GET|/karakon/login|::1|0 B|0 B||
+2022-01-17 19:05:42|2.215995ms|200|GET|/karakon/assets/login/dist/all.min.css|::1|0 B|0 B||
+2022-01-17 19:05:42|3.34661ms|200|GET|/karakon/assets/login/dist/all.min.js|::1|0 B|0 B||
+2022-01-17 19:05:49|465.892969ms|200|POST|/karakon/signin|::1|0 B|0 B||
+2022-01-17 19:05:49|108.259687ms|200|GET|/karakon|::1|0 B|0 B||
+2022-01-17 19:05:49|15.30601ms|200|GET|/karakon/assets/dist/js/all.min.8425540791.js|::1|0 B|0 B||
+2022-01-17 19:05:49|27.568805ms|200|GET|/karakon/assets/dist/css/all.min.79250b7051.css|::1|0 B|0 B||
+2022-01-17 19:05:49|393.623µs|200|GET|/karakon/assets/dist/js/tree.min.e1faf8b7de.js|::1|0 B|0 B||
+2022-01-17 19:05:49|543.593µs|200|GET|/karakon/assets/dist/js/treeview.min.7780d3bb0f.js|::1|0 B|0 B||
+2022-01-17 19:05:49|3.879164ms|200|GET|/karakon/assets/dist/js/datatable.min.581cdc109b.js|::1|0 B|0 B||
+2022-01-17 19:05:49|4.531142ms|200|GET|/karakon/assets/chart.min.js|::1|0 B|0 B||
+2022-01-17 19:05:49|24.784803ms|200|GET|/karakon/assets/dist/js/all_2.min.38a2a946b0.js|::1|0 B|0 B||
+2022-01-17 19:05:49|24.764424ms|200|GET|/karakon/assets/dist/img/avatar04.png|::1|0 B|0 B||
+2022-01-17 19:05:49|37.612142ms|200|GET|/karakon/assets/dist/js/form.min.f8678914e9.js|::1|0 B|0 B||
+2022-01-17 19:05:49|2.532632ms|200|GET|/karakon/assets/dist/fonts/fontawesome-webfont.woff2|::1|v=4.7.0|0 B|0 B||
+2022-01-17 19:05:49|1.078478ms|200|GET|/karakon/assets/dist/css/fonts/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7g.ttf|::1|0 B|0 B||
+2022-01-17 19:05:50|1.250832ms|200|GET|/karakon/assets/dist/css/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rwlxdr.ttf|::1|0 B|0 B||
+2022-01-17 19:06:01|243.435598ms|200|GET|/karakon/info/manager|::1|__prefix=manager __prefix=manager _pjax=#pjax-container|0 B|0 B||
+2022-01-17 19:06:01|419.207µs|200|GET|/karakon/assets/dist/css/blue@2x.png|::1|0 B|0 B||
+2022-01-17 19:06:22|36.45µs|404|GET|/api/counter|::1|0 B|0 B||
+2022-01-17 19:06:23|8.883µs|404|POST|/api/counter/increment|::1|0 B|0 B||
+2022-01-17 19:09:44|134.322µs|404|GET|/login|::1|0 B|0 B||
+2022-01-17 19:11:41|78.544µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:11:47|35.839µs|404|GET|/user|::1|0 B|0 B||
+2022-01-17 19:11:50|32.541µs|404|GET|/user|::1|0 B|0 B||
+2022-01-17 19:12:39|58.745µs|404|GET|/users|::1|0 B|0 B||
+2022-01-17 19:12:44|50.169µs|404|GET|/api/counter|::1|0 B|0 B||
+2022-01-17 19:12:51|34.296µs|404|GET|/login|::1|0 B|0 B||
+2022-01-17 19:13:03|31.094µs|404|GET|/user/register|::1|0 B|0 B||
+2022-01-17 19:13:05|36.579µs|404|GET|/user/register|::1|0 B|0 B||
+2022-01-17 19:30:44|32.270124ms|200|GET|/karakon|::1|0 B|0 B||
+2022-01-17 19:33:58|137.988µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:34:03|45.717µs|404|GET|/login|::1|0 B|0 B||
+2022-01-17 19:34:06|35.616µs|404|GET|/login|::1|0 B|0 B||
+2022-01-17 19:34:10|52.126µs|404|GET|/api/counter|::1|0 B|0 B||
+2022-01-17 19:34:14|53.717µs|404|GET|/login|::1|0 B|0 B||
+2022-01-17 19:35:04|63.465µs|404|GET|/user/register|::1|0 B|0 B||
+2022-01-17 19:35:27|52.295µs|404|GET|/user/register|::1|0 B|0 B||
+2022-01-17 19:35:27|1.231179ms|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 19:36:04|30.288µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:36:22|63.699µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:36:22|448.07µs|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 19:36:22|38.486µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:36:23|196.322µs|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 19:42:05|114.094µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:42:05|1.386507ms|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 19:42:10|32.267µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:42:11|630.854µs|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 19:42:23|57.802µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 19:42:32|32.148µs|404|GET|/login|::1|0 B|0 B||
+2022-01-17 19:46:38|186.038µs|404|GET|/login|::1|0 B|0 B||
+2022-01-17 19:46:38|1.247636ms|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 19:46:45|33.26µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 20:03:31|170.313µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:03:39|31.781µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:03:39|1.653164ms|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 20:05:32|41.598µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:05:33|25.688µs|404|GET|/favicon.ico|::1|0 B|0 B||
+2022-01-17 20:05:56|12.634µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:05:58|10.274µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:06:01|13.182µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:06:19|8.444µs|404|GET|/|::1|0 B|0 B||
+2022-01-17 20:08:35|21.043µs|404|GET|/|::1|0 B|0 B||
+2022-01-17 20:22:34|105.533µs|404|GET|/auth|::1|0 B|0 B||
+2022-01-17 20:22:41|32.889µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:22:53|29.142µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 20:23:00|33.001µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:23:09|54.608734ms|200|GET|/karakon|::1|0 B|0 B||
+2022-01-17 20:23:09|23.050798ms|200|GET|/karakon/assets/dist/js/all.min.8425540791.js|::1|0 B|0 B||
+2022-01-17 20:23:09|25.8156ms|200|GET|/karakon/assets/dist/css/all.min.79250b7051.css|::1|0 B|0 B||
+2022-01-17 20:23:09|438.887µs|200|GET|/karakon/assets/dist/js/tree.min.e1faf8b7de.js|::1|0 B|0 B||
+2022-01-17 20:23:09|630.438µs|200|GET|/karakon/assets/dist/js/treeview.min.7780d3bb0f.js|::1|0 B|0 B||
+2022-01-17 20:23:09|7.790641ms|200|GET|/karakon/assets/chart.min.js|::1|0 B|0 B||
+2022-01-17 20:23:09|12.456714ms|200|GET|/karakon/assets/dist/js/datatable.min.581cdc109b.js|::1|0 B|0 B||
+2022-01-17 20:23:09|26.864892ms|200|GET|/karakon/assets/dist/img/avatar04.png|::1|0 B|0 B||
+2022-01-17 20:23:09|34.379732ms|200|GET|/karakon/assets/dist/js/all_2.min.38a2a946b0.js|::1|0 B|0 B||
+2022-01-17 20:23:09|43.764565ms|200|GET|/karakon/assets/dist/js/form.min.f8678914e9.js|::1|0 B|0 B||
+2022-01-17 20:23:10|1.869569ms|200|GET|/karakon/assets/dist/fonts/fontawesome-webfont.woff2|::1|v=4.7.0|0 B|0 B||
+2022-01-17 20:23:10|1.111619ms|200|GET|/karakon/assets/dist/css/fonts/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7g.ttf|::1|0 B|0 B||
+2022-01-17 20:23:10|1.167065ms|200|GET|/karakon/assets/dist/css/fonts/6xKydSBYKcSV-LCoeQqfX1RYOo3i54rwlxdr.ttf|::1|0 B|0 B||
+2022-01-17 20:25:56|390.93µs|200|GET|/|::1|0 B|0 B||
+2022-01-17 20:25:56|444.489µs|200|GET|/build/bundle.js|::1|file=build/bundle.js|0 B|0 B||
+2022-01-17 20:25:56|56.497µs|404|GET|/api/counter|::1|0 B|0 B||
+2022-01-17 20:25:56|3.658803ms|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-01-17 20:25:56|363.236µs|200|GET|/build/bundle.js.map|::1|file=build/bundle.js.map|0 B|0 B||
+2022-01-17 20:26:06|32.774µs|404|GET|/auth|::1|0 B|0 B||
+2022-01-17 20:26:12|57.536µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 20:26:29|38.548µs|404|GET|/users|::1|0 B|0 B||
+2022-01-17 20:30:14|409.107µs|404|GET|/token|::1|0 B|0 B||
+2022-01-17 20:30:21|40.067µs|404|GET|/auth/token|::1|0 B|0 B||
+2022-01-17 20:30:23|38.374µs|404|GET|/auth/token|::1|0 B|0 B||
+2022-01-17 20:30:24|38.773µs|404|GET|/auth/token|::1|0 B|0 B||
+2022-01-17 20:30:29|32.65µs|404|GET|/user/token|::1|0 B|0 B||
+2022-01-17 20:40:39|64.662µs|404|GET|/product|::1|0 B|0 B||
+2022-01-17 20:54:54|98.747µs|404|GET|/auth|::1|0 B|0 B||
+2022-01-17 20:55:01|39.9µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 21:03:24|95.482µs|404|GET|/auth/login|::1|0 B|0 B||
+2022-01-17 21:16:26|152.043µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:16:31|51.593µs|301|GET|/auth/|::1|0 B|0 B||
+2022-01-17 21:16:31|44.1µs|404|GET|/auth|::1|0 B|0 B||
+2022-01-17 21:16:37|27.14µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:16:42|19.312µs|401|GET|/auth/register|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:17:14|53.28µs|401|GET|/product|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:17:22|40.578µs|404|GET|/auth|::1|0 B|0 B||
+2022-01-17 21:17:27|34.068µs|404|GET|/user/login|::1|0 B|0 B||
+2022-01-17 21:17:36|28.448µs|401|GET|/auth/me|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:20:20|24.502µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:21:48|49.64µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:23:26|108.161µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:28:20|134.052µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:28:52|31.329µs|401|GET|/auth/register|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:28:55|65.86µs|404|GET|/auth/rd|::1|0 B|0 B||
+2022-01-17 21:29:01|33.492µs|401|GET|/auth/me|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:35:27|73.777µs|404|GET|/auth/token|::1|0 B|0 B||
+2022-01-17 21:36:00|173.11µs|200|GET|/token|::1|0 B|0 B||
+2022-01-17 21:36:26|25.341µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-01-17 21:37:03|36.296µs|200|GET|/token|::1|0 B|0 B||
+2022-01-17 21:37:29|2.872624ms|200|GET|/auth/login|::1|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2lyaXMtZ28uY29tIiwiYXVkIjpbIjhhNTA2MjliLWE2YmMtNDQ1Ni1iN2FiLWZhNzkxNjlmZTFjYiJdLCJpYXQiOjE2NDI0NDgyMjMsImV4cCI6MTY0MjQ0OTEyM30.YtL3sArtRbqawEc__bptBiptDd7JgdmnR6ONVuBJ65o|0 B|0 B||
+2022-01-17 21:37:29|57.35µs|404|GET|/public/css/site.css|::1|0 B|0 B||
+2022-01-17 21:37:39|12.012µs|404|POST|/user/login|::1|29 B|0 B|username=admin&password=admin|
