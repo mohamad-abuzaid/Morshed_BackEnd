@@ -86,8 +86,8 @@ func main() {
 
 	secret := helpers.Mgetenv("JWT_SECRET", "EbnJO3bwmX")
 
-	subRouter := api.Router(db, secret)
-	app.PartyFunc("/", subRouter)
+	authRouter := api.Router(db, secret)
+	app.PartyFunc("/", authRouter)
 
 	/////////////////////////////////////////////////
 	//////////////////// RUN ///////////////////////
