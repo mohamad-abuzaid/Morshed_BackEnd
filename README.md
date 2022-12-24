@@ -35,6 +35,7 @@ go run main.go
 Navigate to [localhost:8080](http://localhost:8080) or [localhost](http://localhost). You should see your app running.
 
 
-## For Login/Register pages
+#### For Login/Register pages
 1. Get a security token by going to [localhost/token](http://localhost/token)
-2. Go toLogin/Register page by adding the token as a parameter. [localhost/auth/login?token=$token](http://localhost/auth/login?token=$token)
+2. Go to Login/Register page by adding the token as a parameter. [localhost/auth/login?token=$token](http://localhost/auth/login?token=$token)
+3. If using Postman, put an Authentication: Bearer $token to get access
