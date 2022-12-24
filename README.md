@@ -32,4 +32,9 @@ cd ../
 go run main.go
 ```
 
-Navigate to [localhost:8080](http://localhost:8080). You should see your app running.
+Navigate to [localhost:8080](http://localhost:8080) or [localhost](http://localhost). You should see your app running.
+
+
+## For Login/Register pages
+1. Get a security token by going to [localhost/token](http://localhost/token)
+2. Go toLogin/Register page by adding the token as a parameter. [localhost/auth/login?token=$token](http://localhost/auth/login?token=$token)
