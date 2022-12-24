@@ -96,3 +96,18 @@
 2022-01-17T21:26:59.828+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize navigation buttons
 2022-01-17T21:26:59.828+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize plugins
 2022-01-17T21:26:59.828+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize success🍺🍺
+2022-12-21T17:56:46.267+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize database connections
+2022-12-21T17:56:46.342+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize configuration
+2022-12-21T17:56:46.350+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize navigation buttons
+2022-12-21T17:56:46.351+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize plugins
+2022-12-21T17:56:46.351+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize success🍺🍺
+2022-12-24T18:41:33.224+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize database connections
+2022-12-24T18:41:33.327+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize configuration
+2022-12-24T18:41:33.335+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize navigation buttons
+2022-12-24T18:41:33.336+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize plugins
+2022-12-24T18:41:33.336+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize success🍺🍺
+2022-12-24T18:47:04.018+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize database connections
+2022-12-24T18:47:04.029+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize configuration
+2022-12-24T18:47:04.039+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize navigation buttons
+2022-12-24T18:47:04.039+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize plugins
+2022-12-24T18:47:04.039+0200	[34mINFO[0m	engine/engine.go:402	=====> Initialize success🍺🍺

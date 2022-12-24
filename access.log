@@ -131,3 +131,18 @@
 2022-01-17 21:37:29|2.872624ms|200|GET|/auth/login|::1|token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2lyaXMtZ28uY29tIiwiYXVkIjpbIjhhNTA2MjliLWE2YmMtNDQ1Ni1iN2FiLWZhNzkxNjlmZTFjYiJdLCJpYXQiOjE2NDI0NDgyMjMsImV4cCI6MTY0MjQ0OTEyM30.YtL3sArtRbqawEc__bptBiptDd7JgdmnR6ONVuBJ65o|0 B|0 B||
 2022-01-17 21:37:29|57.35µs|404|GET|/public/css/site.css|::1|0 B|0 B||
 2022-01-17 21:37:39|12.012µs|404|POST|/user/login|::1|29 B|0 B|username=admin&password=admin|
+2022-12-21 17:57:01|725.043µs|200|GET|/|::1|0 B|0 B||
+2022-12-21 17:57:01|390.695µs|200|GET|/build/bundle.js|::1|file=build/bundle.js|0 B|0 B||
+2022-12-21 17:57:01|81.091µs|404|GET|/api/counter|::1|0 B|0 B||
+2022-12-21 17:57:01|3.211528ms|200|GET|/favicon.ico|::1|file=favicon.ico|0 B|0 B||
+2022-12-21 17:57:04|9.575µs|404|POST|/api/counter/increment|::1|0 B|0 B||
+2022-12-21 17:57:08|13.815µs|404|POST|/api/counter/increment|::1|0 B|0 B||
+2022-12-21 17:57:49|66.734µs|404|GET|/login|::1|0 B|0 B||
+2022-12-21 17:58:34|48.039µs|401|GET|/auth/register|::1|0 B|0 B|error(jwt: token is empty)|
+2022-12-21 17:58:41|329.201µs|404|GET|/register|::1|0 B|0 B||
+2022-12-21 17:58:47|36.769µs|404|GET|/login|::1|0 B|0 B||
+2022-12-21 17:58:55|27.92µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-12-21 17:59:10|217.887µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-12-24 18:42:11|174.215µs|404|GET|/login|::1|0 B|0 B||
+2022-12-24 18:42:20|75.484µs|401|GET|/auth/login|::1|0 B|0 B|error(jwt: token is empty)|
+2022-12-24 18:46:17|31.551µs|401|GET|/auth/register|::1|0 B|0 B|error(jwt: token is empty)|

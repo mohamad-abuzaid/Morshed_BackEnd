@@ -15,12 +15,15 @@ import (
 // of the example, we will use this datamodel
 // as the only one User model in our application.
 type User struct {
-	ID             int64     `db:"id" json:"id" form:"id"`
-	Firstname      string    `db:"firstname" json:"firstname" form:"firstname"`
-	Username       string    `db:"username" json:"username" form:"username"`
-	HashedPassword []byte    `db:"hashpass" json:"-" form:"-"`
-	CreatedAt   *time.Time `db:"created_at" json:"created_at" form:"created_at"`
-	UpdatedAt   *time.Time `db:"updated_at" json:"updated_at" form:"updated_at"`
+	ID 				int64 			`db:"id" json:"id" form:"id"`
+	Firstname		string			`db:"firstname" json:"firstname" form:"firstname"`
+	Username       	string    		`db:"username" json:"username" form:"username"`
+	Dob       	   	string    		`db:"dob" json:"dob" form:"dob"`
+	Address        	string    		`db:"address" json:"address" form:"address"`
+	Description    	string    		`db:"description" json:"description" form:"description"`
+	HashedPassword 	[]byte    		`db:"hashpass" json:"-" form:"-"`
+	CreatedAt   	*time.Time 		`db:"created_at" json:"created_at" form:"created_at"`
+	UpdatedAt   	*time.Time 		`db:"updated_at" json:"updated_at" form:"updated_at"`
 }
 
 // TableName returns the database table name of a User.
